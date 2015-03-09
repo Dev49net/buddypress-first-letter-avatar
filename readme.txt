@@ -1,6 +1,6 @@
 === BuddyPress First Letter Avatar ===
 Plugin Name: BuddyPress First Letter Avatar
-Version: 1.0
+Version: 1.0.1
 Plugin URI: https://github.com/DanielAGW/buddypress-first-letter-avatar
 Contributors: DanielAGW
 Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar
@@ -57,7 +57,7 @@ NOTE: Your custom avatars WILL BE DELETED after updating the plugin! Make backup
 Of course! This can be done in plugin settings.
 
 = I don't want to use Gravatar at all. Can I disable it? =
-Yes! By default, WP First Letter Avatar sets custom avatar only to users without Gravatar, but in plugin settings you can disable it and use custom avatar for everybody.
+Yes! By default, BuddyPress First Letter Avatar sets custom avatar only to users without Gravatar and profile avatar, but in plugin settings you can disable it and use custom avatar for everybody.
 
 = Can avatars be round, like in Google+? =
 Yes - just go to plugin settings and click Round avatars.
@@ -75,10 +75,16 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 
 == Changelog ==
 
+= 1.0.1 =
+* Fixed avatar presentation in WP-Admin
+
 = 1.0 =
 * First BuddyPress First Letter Avatar release
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Fixed avatar presentation in WP-Admin. Update recommended.
 
 = 1.0 =
 First BuddyPress First Letter Avatar release.

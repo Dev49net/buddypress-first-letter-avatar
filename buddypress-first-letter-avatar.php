@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/DanielAGW/buddypress-first-letter-avatar
  * Contributors: DanielAGW
  * Description: Set custom avatars for BuddyPress users. The avatar will be a first (or any other) letter of the users's name.
- * Version: 1.0
+ * Version: 1.0.1
  * Author: Daniel Wroblewski
  * Author URI: https://github.com/DanielAGW
  * Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar
@@ -51,19 +51,15 @@ class BuddyPress_First_Letter_Avatar {
 		// add stylesheets/scripts:
 		add_action('wp_enqueue_scripts', array($this, 'bpfla_add_scripts'));
 
-		// add filter to get_avatar but only when not in admin panel:
-		if (!is_admin()){
-			add_filter('get_avatar', array($this, 'set_comment_avatar'), 10, 5); // this will only be used for anonymous WordPress comments
-		}
-
 		// add filter to get_avatar:
-		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), 10, 1);
+		add_filter('get_avatar', array($this, 'set_comment_avatar'), 10, 5); // this will only be used for anonymous WordPress comments
 
+		// add filter to bp_core_fetch_avatar:
+		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), 10, 1);
 
 		// get plugin configuration from database:
 		$options = get_option('bpfla_settings');
 		if (empty($options)){
-
 			// no records in DB, use default (const) values to save plugin config:
 			$settings = array(
 				'bpfla_use_profile_avatar' => self::BPFLA_USE_PROFILE_AVATAR,
@@ -75,9 +71,7 @@ class BuddyPress_First_Letter_Avatar {
 				'bpfla_unknown_image' => self::BPFLA_IMAGE_UNKNOWN
 			);
 			add_option('bpfla_settings', $settings);
-
 		} else {
-
 			// there are records in DB for our plugin, let's assign them to our variables:
 			$this->use_profile_avatar = $options['bpfla_use_profile_avatar'];
 			$this->use_gravatar = $options['bpfla_use_gravatar'];
@@ -86,7 +80,6 @@ class BuddyPress_First_Letter_Avatar {
 			$this->images_format = $options['bpfla_file_format'];
 			$this->round_avatars = $options['bpfla_round_avatars'];
 			$this->image_unknown = $options['bpfla_unknown_image'];
-
 		}
 
 	}

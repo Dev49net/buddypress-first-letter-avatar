@@ -14,8 +14,8 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 	public function __construct(){
 
-		add_action( 'admin_menu', array($this, 'bpfla_add_admin_menu' ));
-		add_action( 'admin_init', array($this, 'bpfla_settings_init' ));
+		add_action('admin_menu', array($this, 'bpfla_add_admin_menu'));
+		add_action('admin_init', array($this, 'bpfla_settings_init'));
 
 	}
 
