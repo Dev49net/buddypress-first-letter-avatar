@@ -59,6 +59,10 @@ Check: use users' profile avatars when available; Uncheck: use custom avatars or
 
 Check: use Gravatar when available; Uncheck: use custom avatars or users' profile avatars.
 
+**Use JavaScript for Gravatars:**
+
+Check: use JavaScript to check for Gravatars (faster); Uncheck: use PHP to check for Gravatars (slower).
+
 **Round avatars:**
 
 Check: use rounded avatars; Uncheck: use standard avatars.
