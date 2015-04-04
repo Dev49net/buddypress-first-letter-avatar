@@ -1,6 +1,6 @@
 === BuddyPress First Letter Avatar ===
 Plugin Name: BuddyPress First Letter Avatar
-Version: 1.0.1
+Version: 1.0.2
 Plugin URI: https://github.com/DanielAGW/buddypress-first-letter-avatar
 Contributors: DanielAGW
 Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar
@@ -18,7 +18,7 @@ BuddyPress plugin to set custom avatars for users with no Gravatar and no profil
 
 BuddyPress First Letter Avatar **sets custom avatars for users without profile picture or Gravatar**. The avatar will be a first letter of the users's name, just like in [Discourse](http://www.discourse.org/). You can also configure plugin to use any other letter to set custom avatar.
 
-BuddyPress First Letter Avatar is based on my other plugin - [WP First Letter Avatar](https://wordpress.org/plugins/wp-first-letter-avatar/). BuddyPress First Letter avatar is basically the same thing, but programmed to work with BuddyPress.
+BuddyPress First Letter Avatar is based on my other plugin - [WP First Letter Avatar](https://wordpress.org/plugins/wp-first-letter-avatar/). BuddyPress First Letter Avatar is basically the same thing, but programmed to work with BuddyPress.
 
 BuddyPress First Letter Avatar includes a set of **beautiful, colorful letter avatars** in many sizes. Optimal size will be chosen by the plugin in order to display high quality avatar and not download, for example, big 512px avatars when only 48px is needed... **PSD template** for avatar is also included.
 
@@ -31,6 +31,9 @@ BuddyPress First Letter Avatar helps you **bring more colors into your BuddyPres
 All images were compressed using the fantastic [TinyPNG](https://tinypng.com/), so avatars are **incredibly light and ultra-high quality**.
 
 You can [fork the plugin on GitHub](https://github.com/DanielAGW/buddypress-first-letter-avatar).
+
+= Requirements =
+BuddyPress First Letter Avatar requires at least PHP 5.4.0. It **does not work properly** on PHP 5.3.x and earlier.
 
 == Installation ==
 
@@ -74,6 +77,13 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 5. Very simple settings page for BuddyPress First Letter Avatar. You can decide which character should be used to specify avatar, turn off Gravatar, use custom avatar sets, use rounded avatars etc.
 
 == Changelog ==
+
+= 1.0.2 =
+* PHP 5.4.x or later REQUIRED: PHP 5.3.x is no longer supported by PHP team, if you are still using it - update immediately
+* Added asynchronous Gravatar loading for faster page rendering (needs to be activated in plugin Settings)
+* Added auto-check to see if one or more options in plugin Settings are not empty
+* Fixed standard avatars replacement on Discussion page in Settings
+* Couple of minor fixes
 
 = 1.0.1 =
 * Fixed avatar presentation in WP-Admin

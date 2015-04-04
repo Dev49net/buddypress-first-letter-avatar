@@ -83,8 +83,17 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_use_gravatar',
-			'Use Gravatar<br/>Default: check',
+			'Use Gravatars<br/>Default: check',
 			array($this, 'bpfla_use_gravatar_render'),
+			'bpfla_pluginPage',
+			'bpfla_pluginPage_section'
+		);
+
+
+		add_settings_field(
+			'bpfla_use_js',
+			'Use JavaScript for Gravatars<br/>Default: uncheck',
+			array($this, 'bpfla_use_js_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
 		);
@@ -144,7 +153,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_use_profile_avatar_render(){
 
 		?>
-		<input type='checkbox' name='bpfla_settings[bpfla_use_profile_avatar]' <?php checked( $this->bpfla_options['bpfla_use_profile_avatar'], 1 ); ?> value='1' />
+		<input type='checkbox' name='bpfla_settings[bpfla_use_profile_avatar]' <?php checked($this->bpfla_options['bpfla_use_profile_avatar'], 1); ?> value='1' />
 	<?php
 
 	}
@@ -154,7 +163,17 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_use_gravatar_render(){
 
 		?>
-		<input type='checkbox' name='bpfla_settings[bpfla_use_gravatar]' <?php checked( $this->bpfla_options['bpfla_use_gravatar'], 1 ); ?> value='1' />
+		<input type='checkbox' name='bpfla_settings[bpfla_use_gravatar]' <?php checked($this->bpfla_options['bpfla_use_gravatar'], 1); ?> value='1' />
+	<?php
+
+	}
+
+
+
+	public function bpfla_use_js_render(){
+
+		?>
+		<input type='checkbox' name='bpfla_settings[bpfla_use_js]' <?php checked($this->bpfla_options['bpfla_use_js'], 1); ?> value='1' />
 	<?php
 
 	}
@@ -164,7 +183,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_round_avatars_render(){
 
 		?>
-		<input type='checkbox' name='bpfla_settings[bpfla_round_avatars]' <?php checked( $this->bpfla_options['bpfla_round_avatars'], 1 ); ?> value='1' />
+		<input type='checkbox' name='bpfla_settings[bpfla_round_avatars]' <?php checked($this->bpfla_options['bpfla_round_avatars'], 1); ?> value='1' />
 	<?php
 
 	}
@@ -220,10 +239,15 @@ class BuddyPress_First_Letter_Avatar_Config {
 				<span style="text-decoration: underline">Check</span>: use Gravatar when available; <span style="text-decoration: underline">Uncheck</span>: use users' profile avatars or custom avatars.
 			</p>
 			<p>
+				<strong>Use JavaScript for Gravatars</strong><br />
+				<span>Works only when option Use Gravatar is active</span><br />
+				<span style="text-decoration: underline">Check</span>: use JavaScript to check for Gravatars (faster); <span style="text-decoration: underline">Uncheck</span>: use PHP to check for Gravatars (slower).
+			</p>
+			<p>
 				<strong>Round avatars</strong><br />
 				<span style="text-decoration: underline">Check</span>: use rounded avatars; <span style="text-decoration: underline">Uncheck</span>: use standard avatars.
 			</p>
-			<p>In case of any problems, use the default values.</p>
+			<p>In case of any problems, use default values.</p>
 
 			<hr />
 

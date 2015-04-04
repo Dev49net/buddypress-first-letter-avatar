@@ -27,6 +27,10 @@ The only difference between [WP First Letter Avatar](https://github.com/DanielAG
 
 These two plugins can be activated together (there is no conflict between them), but there is no need for it. BuddyPress First Letter Avatar works on every avatar on BuddyPress site, whereas WP First Letter Avatar works on every avatar on every WordPress site without BuddyPress. So if you use BuddyPress - get this plugin; if you don't - use [WP First Letter Avatar](https://github.com/DanielAGW/wp-first-letter-avatar).
 
+## Requirements
+
+BuddyPress First Letter Avatar requires at least PHP 5.4.0. It **does not work properly** on PHP 5.3.x and earlier.
+
 ## Configuration
 
 Configuration is very simple. Here are configuration options available in options:

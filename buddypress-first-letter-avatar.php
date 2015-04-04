@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/DanielAGW/buddypress-first-letter-avatar
  * Contributors: DanielAGW
  * Description: Set custom avatars for BuddyPress users. The avatar will be a first (or any other) letter of the users's name.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Daniel Wroblewski
  * Author URI: https://github.com/DanielAGW
  * Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar
@@ -26,6 +26,7 @@ class BuddyPress_First_Letter_Avatar {
 	// Default configuration (this is the default configuration only for the first plugin usage):
 	const BPFLA_USE_PROFILE_AVATAR = TRUE;  // TRUE: if user has his profile avatar, use it; FALSE: use custom avatars or Gravatars
 	const BPFLA_USE_GRAVATAR = TRUE;  // TRUE: if user has Gravatar, use it; FALSE: use custom avatars or user's profile avatar
+	const BPFLA_USE_JS = FALSE;  // TRUE: use JS to replace avatars to Gravatar; FALSE: generate avatars and gravatars here in PHP
 	const BPFLA_AVATAR_SET = 'default'; // directory where avatars are stored
 	const BPFLA_LETTER_INDEX = 0;  // 0: first letter; 1: second letter; -1: last letter, etc.
 	const BPFLA_IMAGES_FORMAT = 'png';   // file format of the avatars
@@ -35,6 +36,7 @@ class BuddyPress_First_Letter_Avatar {
 	// variables duplicating const values (will be changed in constructor after reading config from DB):
 	private $use_profile_avatar = self::BPFLA_USE_PROFILE_AVATAR;
 	private $use_gravatar = self::BPFLA_USE_GRAVATAR;
+	private $use_js = self::BPFLA_USE_JS;
 	private $avatar_set = self::BPFLA_AVATAR_SET;
 	private $letter_index = self::BPFLA_LETTER_INDEX;
 	private $images_format = self::BPFLA_IMAGES_FORMAT;
@@ -48,14 +50,27 @@ class BuddyPress_First_Letter_Avatar {
 		// add Settings link to plugins page:
 		add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'bpfla_add_settings_link'));
 
-		// add stylesheets/scripts:
+		// add stylesheets/scripts for front-end and admin:
 		add_action('wp_enqueue_scripts', array($this, 'bpfla_add_scripts'));
+		add_action('admin_enqueue_scripts', array($this, 'bpfla_add_scripts'));
+
+		// add Ajax action for asynchronous Gravatar verification:
+		add_action('wp_ajax_gravatar_verify', array($this, 'ajax_gravatar_exists'));
+		add_action('wp_ajax_nopriv_gravatar_verify', array($this, 'ajax_gravatar_exists'));
 
 		// add filter to get_avatar:
 		add_filter('get_avatar', array($this, 'set_comment_avatar'), 10, 5); // this will only be used for anonymous WordPress comments
 
 		// add filter to bp_core_fetch_avatar:
 		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), 10, 1);
+
+		// when in admin, make sure first letter avatars are not displayed on discussion settings page:
+		if (is_admin()){
+			global $pagenow;
+			if ($pagenow == 'options-discussion.php'){
+				remove_filter('get_avatar', array($this, 'set_comment_avatar'));
+			}
+		}
 
 		// get plugin configuration from database:
 		$options = get_option('bpfla_settings');
@@ -64,6 +79,7 @@ class BuddyPress_First_Letter_Avatar {
 			$settings = array(
 				'bpfla_use_profile_avatar' => self::BPFLA_USE_PROFILE_AVATAR,
 				'bpfla_use_gravatar' => self::BPFLA_USE_GRAVATAR,
+				'bpfla_use_js' => self::BPFLA_USE_JS,
 				'bpfla_avatar_set' => self::BPFLA_AVATAR_SET,
 				'bpfla_letter_index' => self::BPFLA_LETTER_INDEX,
 				'bpfla_file_format' => self::BPFLA_IMAGES_FORMAT,
@@ -72,9 +88,39 @@ class BuddyPress_First_Letter_Avatar {
 			);
 			add_option('bpfla_settings', $settings);
 		} else {
-			// there are records in DB for our plugin, let's assign them to our variables:
+			// there are records in DB for our plugin, let's check if some of them are not empty:
+			$change_values = FALSE; // do not update settings by default...
+			if ($options['bpfla_avatar_set'] === ''){
+				$options['bpfla_avatar_set'] = self::BPFLA_AVATAR_SET;
+				$change_values = TRUE;
+			}
+			if ($options['bpfla_letter_index'] === ''){
+				$options['bpfla_letter_index'] = self::BPFLA_LETTER_INDEX;
+				$change_values = TRUE;
+			}
+			if ($options['bpfla_file_format'] === ''){
+				$options['bpfla_file_format'] = self::BPFLA_IMAGES_FORMAT;
+				$change_values = TRUE;
+			}
+			if ($options['bpfla_unknown_image'] === ''){
+				$options['bpfla_unknown_image'] = self::BPFLA_IMAGE_UNKNOWN;
+				$change_values = TRUE;
+			}
+			if ($change_values === TRUE){
+				$settings['bpfla_use_profile_avatar'] = $options['bpfla_use_profile_avatar'];
+				$settings['bpfla_use_gravatar'] = $options['bpfla_use_gravatar'];
+				$settings['bpfla_use_js'] = $options['bpfla_use_js'];
+				$settings['bpfla_avatar_set'] = $options['bpfla_avatar_set'];
+				$settings['bpfla_letter_index'] = $options['bpfla_letter_index'];
+				$settings['bpfla_file_format'] = $options['bpfla_file_format'];
+				$settings['bpfla_round_avatars'] = $options['bpfla_round_avatars'];
+				$settings['bpfla_unknown_image'] = $options['bpfla_unknown_image'];
+				update_option('bpfla_settings', $settings);
+			}
+			// and then assign them to our class properties
 			$this->use_profile_avatar = $options['bpfla_use_profile_avatar'];
 			$this->use_gravatar = $options['bpfla_use_gravatar'];
+			$this->use_js = $options['bpfla_use_js'];
 			$this->avatar_set = $options['bpfla_avatar_set'];
 			$this->letter_index = $options['bpfla_letter_index'];
 			$this->images_format = $options['bpfla_file_format'];
@@ -100,7 +146,34 @@ class BuddyPress_First_Letter_Avatar {
 	public function bpfla_add_scripts(){
 
 		// add main CSS file:
-		wp_enqueue_style('prefix-style', plugins_url('css/style.css', __FILE__) );
+		wp_enqueue_style('prefix-style', plugins_url('css/style.css', __FILE__));
+
+		// add main JS file, only when JS is used:
+		if ($this->use_js == TRUE){
+			$js_variables = array(
+				'img_data_attribute' => 'data-bpfla-gravatar',
+				'ajaxurl' => admin_url('admin-ajax.php')
+			);
+			wp_enqueue_script('bpfla-script-handle', plugins_url('js/script.js', __FILE__), array('jquery'));
+			wp_localize_script('bpfla-script-handle', 'bpfla_vars_data', $js_variables);
+		}
+
+	}
+
+
+
+	public function ajax_gravatar_exists(){
+
+		$gravatar_uri = $_POST['gravatar_uri'];
+		$gravatar_exists = $this->gravatar_exists_uri($gravatar_uri);
+
+		if ($gravatar_exists == TRUE){
+			echo '1';
+		} else {
+			echo '0';
+		}
+
+		exit;
 
 	}
 
@@ -165,7 +238,7 @@ class BuddyPress_First_Letter_Avatar {
 		}
 
 		// first check whether Gravatar should be used at all:
-		if ($this->use_gravatar == TRUE){
+		if ($this->use_gravatar == TRUE && $this->use_js == FALSE){
 			// gravatar used as default option, now check whether user's gravatar is set:
 			if ($this->gravatar_exists($email)){
 				// gravatar is set, output the gravatar img
@@ -174,8 +247,11 @@ class BuddyPress_First_Letter_Avatar {
 				// gravatar is not set, proceed to choose custom avatar:
 				$avatar_output = $this->choose_custom_avatar($name, $size, $alt);
 			}
+		} else if ($this->use_gravatar == TRUE && $this->use_js == TRUE){
+			// gravatar with JS is used as default option, only custom avatars will be used; proceed to choose custom avatar:
+			$avatar_output = $this->choose_custom_avatar($name, $size, $alt, $email);
 		} else {
-			// gravatar is not used as default option, only custom avatars will be used; proceed to choose custom avatar:
+			// gravatar is not used:
 			$avatar_output = $this->choose_custom_avatar($name, $size, $alt);
 		}
 
@@ -198,8 +274,14 @@ class BuddyPress_First_Letter_Avatar {
 				$name = str_replace('Profile picture of ', '', $alt);
 			} else if (stripos($alt, 'Profile photo of ') === 0){ // or profile photo of...
 				$name = str_replace('Profile photo of ', '', $alt);
-			} else { // if there is some problem - just assign alt to name
-				$name = $alt;
+			} else {
+				if (is_user_logged_in()){
+					$user = get_user_by('id', get_current_user_id());
+					$name = $user->data->display_name;
+				} else {
+					$name = '';
+				}
+
 			}
 		}
 
@@ -208,7 +290,7 @@ class BuddyPress_First_Letter_Avatar {
 			return $html_data;
 		}
 
-		// if there is no gravatar URL it means that user has set his own profila avatar,
+		// if there is no gravatar URL it means that user has set his own profile avatar,
 		// so we're gonna see if we should be using it;
 		// if we should, just return the input data and leave the avatar as it was:
 		if ($this->use_profile_avatar == TRUE){
@@ -218,7 +300,7 @@ class BuddyPress_First_Letter_Avatar {
 		}
 
 		// check whether Gravatar should be used at all:
-		if ($this->use_gravatar == TRUE){
+		if ($this->use_gravatar == TRUE && $this->use_js == FALSE){
 			// gravatar used as default option, now check whether user's gravatar is set:
 			if ($this->gravatar_exists_uri($original_image)){
 				// gravatar is set, return input data (nothing changes):
@@ -227,6 +309,8 @@ class BuddyPress_First_Letter_Avatar {
 				// gravatar is not set, proceed to choose custom avatar:
 				$avatar_output = $this->choose_custom_avatar($name, $size, $alt);
 			}
+		} else if ($this->use_gravatar == TRUE && $this->use_js == TRUE){
+			$avatar_output = $this->choose_custom_avatar($name, $size, $alt, $original_image);
 		} else {
 			// gravatar is not used as default option, only custom avatars will be used; proceed to choose custom avatar:
 			$avatar_output = $this->choose_custom_avatar($name, $size, $alt);
@@ -238,29 +322,42 @@ class BuddyPress_First_Letter_Avatar {
 
 
 
-	private function output_gravatar_img($comment_email, $size, $alt = ''){
+	private function generate_gravatar_uri($email, $size){
 
 		// email to gravatar url:
 		$avatar_uri = self::BPFLA_GRAVATAR_URL;
-		$avatar_uri .= md5(strtolower(trim($comment_email)));
+		$avatar_uri .= md5(strtolower(trim($email)));
 		$avatar_uri .= "?s={$size}&d=mm&r=g";
 
+		return $avatar_uri;
+
+	}
+
+
+
+	private function output_gravatar_img($comment_email, $size, $alt = ''){
+
 		// output gravatar:
+		$avatar_uri = $this->generate_gravatar_uri($comment_email, $size);
 		return $this->output_img($avatar_uri, $size, $alt);
 
 	}
 
 
 
-	private function output_img($avatar_uri, $size, $alt = ''){
+	private function output_img($avatar_uri, $size, $alt = '', $gravatar_uri = ''){
 
 		// prepare extra classes for <img> tag depending on plugin settings:
 		$extra_img_class = '';
+		$extra_img_tags = '';
+		if (!empty($gravatar_uri)){
+			$extra_img_tags .= "data-bpfla-gravatar='{$gravatar_uri}'";
+		}
 		if ($this->round_avatars == TRUE){
 			$extra_img_class .= 'round-avatars';
 		}
 
-		$output_data = "<img src='{$avatar_uri}' class='avatar avatar-{$size} photo bpfla {$extra_img_class}' width='{$size}' height='{$size}' alt='{$alt}' />";
+		$output_data = "<img src='{$avatar_uri}' {$extra_img_tags} class='avatar avatar-{$size} photo bpfla {$extra_img_class}' width='{$size}' height='{$size}' alt='{$alt}' />";
 
 		// return the complete <img> tag:
 		return $output_data;
@@ -269,15 +366,14 @@ class BuddyPress_First_Letter_Avatar {
 
 
 
-	private function choose_custom_avatar($username, $size, $alt = ''){
+	private function choose_custom_avatar($username, $size, $alt = '', $email = ''){
 
 		// get picture filename (and lowercase it) from commenter name:
-		//var_dump($username);
-		$file_name = substr($username, $this->letter_index, 1); // get one letter counting from letter_index
-		$file_name = strtolower($file_name); // lowercase it...
-		// if, for some reason, the result is empty, set file_name to default unknown image:
-		if (empty($file_name)){
+		if (empty($username)){  // if, for some reason, the result is empty, set file_name to default unknown image
 			$file_name = $this->image_unknown;
+		} else {
+			$file_name = substr($username, $this->letter_index, 1); // get one letter counting from letter_index
+			$file_name = strtolower($file_name); // lowercase it...
 		}
 
 		// create array with allowed character range (in this case it is a-z range):
@@ -305,8 +401,18 @@ class BuddyPress_First_Letter_Avatar {
 			. $file_name . '.'
 			. $this->images_format;
 
+		$gravatar_uri = '';
+
+		if (!empty($email)){
+			if (filter_var($email, FILTER_VALIDATE_EMAIL)){
+				$gravatar_uri .= $this->generate_gravatar_uri($email, $size);
+			} else {
+				$gravatar_uri .= $email;
+			}
+		}
+
 		// output the final HTML img code:
-		return $this->output_img($avatar_uri, $size, $alt);
+		return $this->output_img($avatar_uri, $size, $alt, $gravatar_uri);
 
 	}
 
