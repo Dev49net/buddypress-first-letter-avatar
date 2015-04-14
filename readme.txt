@@ -1,11 +1,11 @@
 === BuddyPress First Letter Avatar ===
 Plugin Name: BuddyPress First Letter Avatar
-Version: 1.0.2
+Version: 1.0.3
 Plugin URI: https://github.com/DanielAGW/buddypress-first-letter-avatar
 Contributors: DanielAGW
 Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar
-Requires at least: 3.0.1
-Tested up to: 4.1.1
+Requires at least: 4.0
+Tested up to: 4.2
 Stable tag: trunk
 Author: Daniel Wroblewski
 Author URI: https://github.com/DanielAGW
@@ -78,6 +78,15 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 
 == Changelog ==
 
+= 1.0.3 =
+* Fixed couple of minor issues
+* Improved JavaScript Gravatar loading
+* Improved compatibility with non-English BuddyPress versions
+* Added new default avatar in Settings > Discussion page
+* Plugin options removed from database after uninstalling (no DB leftovers after uninstalling)
+* Added protection disallowing activating plugin on PHP < 5.4 and WP < 4.0
+* Added protection disallowing activating plugin without BuddyPress activated
+
 = 1.0.2 =
 * PHP 5.4.x or later REQUIRED: PHP 5.3.x is no longer supported by PHP team, if you are still using it - update immediately
 * Added asynchronous Gravatar loading for faster page rendering (needs to be activated in plugin Settings)
@@ -92,6 +101,9 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 * First BuddyPress First Letter Avatar release
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Fixed couple of issues, added new features. Update recommended.
 
 = 1.0.1 =
 Fixed avatar presentation in WP-Admin. Update recommended.

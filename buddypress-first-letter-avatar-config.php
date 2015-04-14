@@ -251,7 +251,8 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 			<hr />
 
-			<p style="text-align: right; margin-right:30px">BuddyPress First Letter Avatar was created by <a href="https://github.com/DanielAGW/">Daniel Wroblewski</a></p>
+			<p style="text-align: right; margin-right:30px">If you like the plugin, please <a href="https://wordpress.org/support/view/plugin-reviews/buddypress-first-letter-avatar#postform">leave a review in WordPress Plugin Directory</a>!<br />
+				BuddyPress First Letter Avatar was created by <a href="https://github.com/DanielAGW/">Daniel Wroblewski</a></p>
 
 		</form>
 	<?php
