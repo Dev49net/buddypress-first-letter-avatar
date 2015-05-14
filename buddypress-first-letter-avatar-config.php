@@ -92,7 +92,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_use_js',
-			'Use JavaScript for Gravatars<br/>Default: uncheck',
+			'Use JavaScript for Gravatars<br/>Default: check',
 			array($this, 'bpfla_use_js_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -102,6 +102,14 @@ class BuddyPress_First_Letter_Avatar_Config {
 			'bpfla_round_avatars',
 			'Round avatars<br/>Default: uncheck',
 			array($this, 'bpfla_round_avatars_render'),
+			'bpfla_pluginPage',
+			'bpfla_pluginPage_section'
+		);
+
+		add_settings_field(
+			'bpfla_filter_priority',
+			'Plugin filter priority<br/>Default: 10',
+			array($this, 'bpfla_filter_priority_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
 		);
@@ -190,6 +198,16 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 
 
+	public function bpfla_filter_priority_render(){
+
+		?>
+		<input type='text' name='bpfla_settings[bpfla_filter_priority]' value='<?php echo $this->bpfla_options['bpfla_filter_priority']; ?>' />
+	<?php
+
+	}
+
+
+
 	public function bpfla_settings_section_callback(){
 
 		$this->bpfla_options = get_option('bpfla_settings');
@@ -247,12 +265,16 @@ class BuddyPress_First_Letter_Avatar_Config {
 				<strong>Round avatars</strong><br />
 				<span style="text-decoration: underline">Check</span>: use rounded avatars; <span style="text-decoration: underline">Uncheck</span>: use standard avatars.
 			</p>
+			<p>
+				<strong>Filter priority</strong><br />
+				Advanced users only. If you are using various avatar plugins, you can increase or decrease execution priority of this plugin.
+			</p>
 			<p>In case of any problems, use default values.</p>
 
 			<hr />
 
 			<p style="text-align: right; margin-right:30px">If you like the plugin, please <a href="https://wordpress.org/support/view/plugin-reviews/buddypress-first-letter-avatar#postform">leave a review in WordPress Plugin Directory</a>!<br />
-				BuddyPress First Letter Avatar was created by <a href="https://github.com/DanielAGW/">Daniel Wroblewski</a></p>
+				BuddyPress First Letter Avatar was created by <a href="http://dev49.net/">Daniel Wroblewski</a></p>
 
 		</form>
 	<?php
