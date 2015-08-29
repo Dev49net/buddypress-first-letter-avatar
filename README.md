@@ -3,8 +3,6 @@ BuddyPress First Letter Avatar
 
 A WordPress-BuddyPress plugin to set custom avatars for users with no Gravatar and no profile avatar. The avatar will be the first (or any other) letter of user's name.
 
-![BuddyPress First Letter Avatar banner](/assets/banner-772x250.png?raw=true)
-
 ## Description
 
 This plugin is based on my other plugin, [WP First Letter Avatar](https://github.com/Dev49net/wp-first-letter-avatar). What it does is, by default, checks if user has configured her/his avatar or has Gravatar assigned to the email address. If neither of them is present - custom avatar is used. Custom avatar consists of the first letter of user's name and a colorful background. 
