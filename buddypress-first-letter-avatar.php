@@ -2,15 +2,15 @@
 
 /**
  * Plugin Name: BuddyPress First Letter Avatar
- * Plugin URI: https://github.com/Dev49net/buddypress-first-letter-avatar
+ * Plugin URI: http://dev49.net
  * Contributors: Dev49.net, DanielAGW
- * Description: Set custom avatars for BuddyPress users. The avatar will be the first (or any other) letter of the users's name on a colorful background.
- * Version: 1.0.4
+ * Description: Set custom avatars for BuddyPress users. The avatar will be the first (or any other) letter of the user's name on a colorful background.
+ * Version: 2.0
  * Author: Dev49.net
  * Author URI: http://dev49.net
  * Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar, initial avatar
  * Requires at least: 4.0
- * Tested up to: 4.2.2
+ * Tested up to: 4.3
  * Stable tag: trunk
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,11 +20,11 @@
 
 class BuddyPress_First_Letter_Avatar {
 
-	// Setup (these values always stay the same):
+	// Setup:
 	const MINIMUM_PHP = '5.4';
 	const MINIMUM_WP = '4.0';
 	const BPFLA_IMAGES_PATH = 'images'; // avatars root directory
-	const BPFLA_GRAVATAR_URL = 'https://secure.gravatar.com/avatar/';    // default url for gravatar - we're using HTTPS to avoid annoying warnings
+	const BPFLA_GRAVATAR_URL = 'https://secure.gravatar.com/avatar/';    // default url for gravatar
 	const PLUGIN_NAME = 'BuddyPress First Letter Avatar';
 
 	// Default configuration (this is the default configuration only for the first plugin usage):

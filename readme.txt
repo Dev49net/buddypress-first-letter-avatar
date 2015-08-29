@@ -1,39 +1,39 @@
 === BuddyPress First Letter Avatar ===
 Plugin Name: BuddyPress First Letter Avatar
-Version: 1.0.4
-Plugin URI: https://github.com/Dev49net/buddypress-first-letter-avatar
+Version: 2.0
+Plugin URI: http://dev49.net
 Contributors: Dev49.net, DanielAGW
 Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar, initial avatar
 Requires at least: 4.0
-Tested up to: 4.2.2
+Tested up to: 4.3
 Stable tag: trunk
 Author: Dev49.net
 Author URI: http://dev49.net
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-BuddyPress plugin to set custom avatars for users with no Gravatar and no profile avatar. The avatar will be the first letter of the users's name on a colorful background.
+BuddyPress plugin to set custom avatars for users with no Gravatar and no profile avatar. The avatar will be the first letter of user's name on a colorful background.
 
 == Description ==
 
-BuddyPress First Letter Avatar **sets custom avatars for users without profile picture or Gravatar**. The avatar will be a first letter of the users's name. You can also configure plugin to use any other letter to set custom avatar.
+BuddyPress First Letter Avatar **sets custom avatars for users without profile picture or Gravatar**. The avatar will be a first letter of user's name. You can also configure plugin to use any other letter to set custom avatar.
 
 BuddyPress First Letter Avatar is based on my other plugin - [WP First Letter Avatar](https://wordpress.org/plugins/wp-first-letter-avatar/). BuddyPress First Letter Avatar is basically the same thing, but programmed to work with BuddyPress.
 
 BuddyPress First Letter Avatar includes a set of **beautiful, colorful letter avatars** in many sizes. Optimal size will be chosen by the plugin in order to display high quality avatar and not download, for example, big 512px avatars when only 48px is needed... **PSD template** for avatar is also included.
 
-You can also create your own avatar set by creating new directory next to *'default'* folder and following the naming convention from *'default'*. Keep in mind that your avatar set will be deleted after updating plugin!
+You can also create your own avatar set by creating new directory next to *'default'* folder and following the naming convention from *'default'*. 
 
 By default, custom avatar will be set only to users without profile pictures and Gravatars, but you can change that in settings and not use Gravatar/profile pictures at all.
 
-BuddyPress First Letter Avatar helps you **bring more colors into your BuddyPress site**. Plus, your users will be more **willing to actively participate in your site** since they can actually relate to these avatars much better than to Mystery Man.
+BuddyPress First Letter Avatar helps you **bring more colors into your BuddyPress site**. Plus, your users will be more **willing to actively participate in your site** since they can actually relate to these avatars much better than to the Mystery Person.
 
 All images were compressed using the fantastic [TinyPNG](https://tinypng.com/), so avatars are **incredibly light and ultra-high quality**.
 
-You can [fork the plugin on GitHub](https://github.com/Dev49net/buddypress-first-letter-avatar).
+Plugin is also available [on GitHub](https://github.com/Dev49net/buddypress-first-letter-avatar).
 
 = Requirements =
-BuddyPress First Letter Avatar requires at least PHP 5.4.0. It **does not work properly** on PHP 5.3.x and earlier.
+BuddyPress First Letter Avatar requires at least PHP 5.4. It **does not work properly** on PHP 5.3.x and earlier.
 
 == Installation ==
 
@@ -77,6 +77,9 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 5. Very simple settings page for BuddyPress First Letter Avatar. You can decide which character should be used to specify avatar, turn off Gravatar, use custom avatar sets, use rounded avatars etc.
 
 == Changelog ==
+
+= 2.0 =
+* WordPress 4.3 ready (fully tested)
 
 = 1.0.4 =
 * Greatly improved security of AJAX requests
