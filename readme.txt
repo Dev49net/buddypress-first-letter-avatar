@@ -118,6 +118,9 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 
 == Upgrade Notice ==
 
+= 2.0.1 =
+Fixed possible Gravatar incompatibility. Update recommended.
+
 = 1.0.4 =
 Fixed couple of issues, added new features. Update recommended.
 
