@@ -5,7 +5,7 @@
  * Plugin URI: http://dev49.net
  * Contributors: Dev49.net, DanielAGW
  * Description: Set custom avatars for BuddyPress users. The avatar will be the first (or any other) letter of the user's name on a colorful background.
- * Version: 2.0
+ * Version: 2.0.1
  * Author: Dev49.net
  * Author URI: http://dev49.net
  * Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar, initial avatar
@@ -511,7 +511,7 @@ class BuddyPress_First_Letter_Avatar {
 		    returns bool: true if gravatar is assigned, false if it is not */
 
 		$hash = md5(strtolower(trim($email))); // email md5 hash used by gravatar system
-		$uri = 'http://www.gravatar.com/avatar/' . $hash;
+		$uri = self::BPFLA_GRAVATAR_URL . $hash;
 
 		$result = $this->gravatar_exists_uri($uri);
 
@@ -532,6 +532,11 @@ class BuddyPress_First_Letter_Avatar {
 		if (stripos($uri, 'gravatar.com/avatar') === FALSE){
 			return FALSE;
 		}
+		
+		// make sure we are using correct gravatar URL:
+		$uri = str_replace('https://www.gravatar.com/avatar/', self::BPFLA_GRAVATAR_URL, $uri);
+		$uri = str_replace('http://www.gravatar.com/avatar/', self::BPFLA_GRAVATAR_URL, $uri);
+		$uri = str_replace('//www.gravatar.com/avatar/', self::BPFLA_GRAVATAR_URL, $uri);
 
 		// strip all GET parameters:
 		$uri = strtok($uri, '?');
