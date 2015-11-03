@@ -80,20 +80,10 @@ class BuddyPress_First_Letter_Avatar_Config {
 			'bpfla_pluginPage_section'
 		);
 
-
 		add_settings_field(
 			'bpfla_use_gravatar',
 			'Use Gravatars<br/>Default: check',
 			array($this, 'bpfla_use_gravatar_render'),
-			'bpfla_pluginPage',
-			'bpfla_pluginPage_section'
-		);
-
-
-		add_settings_field(
-			'bpfla_use_js',
-			'Use JavaScript for Gravatars<br/>Default: check',
-			array($this, 'bpfla_use_js_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
 		);
@@ -121,7 +111,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_letter_index_render(){
 
 		?>
-		<input style="width:40px;" type='text' name='bpfla_settings[bpfla_letter_index]' value='<?php echo $this->bpfla_options['bpfla_letter_index']; ?>' />
+		<input style="width:40px;" type='text' name='bpfla_settings[bpfla_letter_index]' value='<?php if (array_key_exists('bpfla_letter_index', $this->bpfla_options)) echo $this->bpfla_options['bpfla_letter_index']; ?>' />
 	<?php
 
 	}
@@ -131,7 +121,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_file_format_render(){
 
 		?>
-		<input style="width: 100px;" type='text' name='bpfla_settings[bpfla_file_format]' value='<?php echo $this->bpfla_options['bpfla_file_format']; ?>' />
+		<input style="width: 100px;" type='text' name='bpfla_settings[bpfla_file_format]' value='<?php if (array_key_exists('bpfla_file_format', $this->bpfla_options)) echo $this->bpfla_options['bpfla_file_format']; ?>' />
 	<?php
 
 	}
@@ -141,7 +131,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_unknown_image_render(){
 
 		?>
-		<input type='text' name='bpfla_settings[bpfla_unknown_image]' value='<?php echo $this->bpfla_options['bpfla_unknown_image']; ?>' />
+		<input type='text' name='bpfla_settings[bpfla_unknown_image]' value='<?php if (array_key_exists('bpfla_unknown_image', $this->bpfla_options)) echo $this->bpfla_options['bpfla_unknown_image']; ?>' />
 	<?php
 
 	}
@@ -151,7 +141,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_avatar_set_render(){
 
 		?>
-		<input type='text' name='bpfla_settings[bpfla_avatar_set]' value='<?php echo $this->bpfla_options['bpfla_avatar_set']; ?>' />
+		<input type='text' name='bpfla_settings[bpfla_avatar_set]' value='<?php if (array_key_exists('bpfla_avatar_set', $this->bpfla_options)) echo $this->bpfla_options['bpfla_avatar_set']; ?>' />
 	<?php
 
 	}
@@ -161,7 +151,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_use_profile_avatar_render(){
 
 		?>
-		<input type='checkbox' name='bpfla_settings[bpfla_use_profile_avatar]' <?php checked($this->bpfla_options['bpfla_use_profile_avatar'], 1); ?> value='1' />
+		<input type='checkbox' name='bpfla_settings[bpfla_use_profile_avatar]' <?php if (array_key_exists('bpfla_use_profile_avatar', $this->bpfla_options)) checked($this->bpfla_options['bpfla_use_profile_avatar'], 1); ?> value='1' />
 	<?php
 
 	}
@@ -171,17 +161,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_use_gravatar_render(){
 
 		?>
-		<input type='checkbox' name='bpfla_settings[bpfla_use_gravatar]' <?php checked($this->bpfla_options['bpfla_use_gravatar'], 1); ?> value='1' />
-	<?php
-
-	}
-
-
-
-	public function bpfla_use_js_render(){
-
-		?>
-		<input type='checkbox' name='bpfla_settings[bpfla_use_js]' <?php checked($this->bpfla_options['bpfla_use_js'], 1); ?> value='1' />
+		<input type='checkbox' name='bpfla_settings[bpfla_use_gravatar]' <?php if (array_key_exists('bpfla_use_gravatar', $this->bpfla_options)) checked($this->bpfla_options['bpfla_use_gravatar'], 1); ?> value='1' />
 	<?php
 
 	}
@@ -191,7 +171,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_round_avatars_render(){
 
 		?>
-		<input type='checkbox' name='bpfla_settings[bpfla_round_avatars]' <?php checked($this->bpfla_options['bpfla_round_avatars'], 1); ?> value='1' />
+		<input type='checkbox' name='bpfla_settings[bpfla_round_avatars]' <?php if (array_key_exists('bpfla_round_avatars', $this->bpfla_options)) checked($this->bpfla_options['bpfla_round_avatars'], 1); ?> value='1' />
 	<?php
 
 	}
@@ -201,7 +181,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 	public function bpfla_filter_priority_render(){
 
 		?>
-		<input type='text' name='bpfla_settings[bpfla_filter_priority]' value='<?php echo $this->bpfla_options['bpfla_filter_priority']; ?>' />
+		<input type='text' name='bpfla_settings[bpfla_filter_priority]' value='<?php if (array_key_exists('bpfla_filter_priority', $this->bpfla_options)) echo $this->bpfla_options['bpfla_filter_priority']; ?>' />
 	<?php
 
 	}
@@ -255,11 +235,6 @@ class BuddyPress_First_Letter_Avatar_Config {
 			<p>
 				<strong>Use Gravatar</strong><br />
 				<span style="text-decoration: underline">Check</span>: use Gravatar when available; <span style="text-decoration: underline">Uncheck</span>: use users' profile avatars or custom avatars.
-			</p>
-			<p>
-				<strong>Use JavaScript for Gravatars</strong><br />
-				<span>Works only when option Use Gravatar is active</span><br />
-				<span style="text-decoration: underline">Check</span>: use JavaScript to check for Gravatars (faster); <span style="text-decoration: underline">Uncheck</span>: use PHP to check for Gravatars (slower).
 			</p>
 			<p>
 				<strong>Round avatars</strong><br />
