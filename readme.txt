@@ -12,7 +12,7 @@ Author URI: http://dev49.net
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-BuddyPress plugin to set custom avatars for users with no Gravatar and no profile avatar. The avatar will be the first letter of user's name on a colorful background.
+A WordPress-BuddyPress plugin to set fancy custom avatars for users with no Gravatar and no profile picture.
 
 == Description ==
 
