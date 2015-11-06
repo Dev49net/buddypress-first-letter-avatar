@@ -1,6 +1,6 @@
 === BuddyPress First Letter Avatar ===
 Plugin Name: BuddyPress First Letter Avatar
-Version: 2.1
+Version: 2.1.1
 Plugin URI: http://dev49.net
 Contributors: Dev49.net, DanielAGW
 Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar, initial avatar
@@ -78,6 +78,10 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 
 == Changelog ==
 
+= 2.1.1 =
+* Fixed minor Gravatar compatibility issue
+* Improved coding style (resulting in possibly slightly better performance)
+
 = 2.1 =
 * Redesigned Gravatar/first letter avatar choice mechanism (faster and more reliable performance)
 
@@ -120,6 +124,9 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 * First BuddyPress First Letter Avatar release
 
 == Upgrade Notice ==
+
+= 2.1.1 =
+Improved reliability. Update recommended.
 
 = 2.1 =
 Improved performance and reliability. Update recommended.
