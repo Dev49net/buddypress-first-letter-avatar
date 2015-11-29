@@ -116,9 +116,12 @@ class BuddyPress_First_Letter_Avatar {
 		}
 
 	}
+	
 
 
-
+	/*
+	 * On plugin activation check WP and PHP version and if requirements are not met, disable the plugin and display error
+	 */
 	public function plugin_activate(){ // plugin activation event
 
 		$php = self::MINIMUM_PHP;
@@ -135,12 +138,6 @@ class BuddyPress_First_Letter_Avatar {
 			$version = 'PHP' == $flag ? $php : $wp;
 			deactivate_plugins(plugin_basename(__FILE__));
 			wp_die('<p><strong>' . self::PLUGIN_NAME . '</strong> plugin requires ' . $flag . ' version ' . $version . ' or greater.</p>', 'Plugin Activation Error',  array('response' => 200, 'back_link' => true));
-		}
-
-		// check if BuddyPress is active:
-		if (!function_exists('bp_is_active')){
-			deactivate_plugins(plugin_basename(__FILE__));
-			wp_die('<p><strong>' . self::PLUGIN_NAME . '</strong> plugin requires <strong>BuddyPress</strong> to be activated.</p>', 'Plugin Activation Error',  array('response' => 200, 'back_link' => true));
 		}
 
 	}
