@@ -5,16 +5,23 @@
  * Plugin URI: http://dev49.net
  * Contributors: Dev49.net, DanielAGW
  * Description: Set custom avatars for BuddyPress users. The avatar will be the first (or any other) letter of the user's name on a colorful background.
- * Version: 2.1.1
+ * Version: 2.2
  * Author: Dev49.net
  * Author URI: http://dev49.net
  * Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar, initial avatar
  * Requires at least: 4.0
- * Tested up to: 4.3.1
+ * Tested up to: 4.4
  * Stable tag: trunk
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
+
+
+
+// Exit if accessed directly:
+if (!defined('ABSPATH')){ 
+    exit; 
+}
 
 
 
@@ -51,11 +58,35 @@ class BuddyPress_First_Letter_Avatar {
 
 	public function __construct(){
 
+		/* --------------- WP HOOKS --------------- */
+
 		// add Settings link to plugins page:
 		add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_settings_link'));
 
 		// add plugin activation hook:
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
+
+		// add stylesheets/scripts:
+		add_action('wp_enqueue_scripts', function(){
+			wp_enqueue_style('bpfla-style-handle', plugins_url('css/style.css', __FILE__));
+		});	
+
+		// add filter to get_avatar:
+		add_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority, 5); // this will only be used for anonymous WordPress comments (from non-users)
+
+		// add filter to bp_core_fetch_avatar:
+		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), $this->filter_priority, 2); // this is used for every avatar call except the anonymous comment posters
+
+		// when in admin, make sure first letter avatars are not displayed on discussion settings page:
+		if (is_admin()){
+			global $pagenow;
+			if ($pagenow == 'options-discussion.php'){
+				remove_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority);
+			}
+		}
+		
+
+		/* --------------- CONFIGURATION --------------- */
 
 		// get plugin configuration from database:
 		$options = get_option('bpfla_settings');
@@ -82,25 +113,6 @@ class BuddyPress_First_Letter_Avatar {
 			$this->round_avatars = (array_key_exists('bpfla_round_avatars', $options) ? (bool)$options['bpfla_round_avatars'] : false);
 			$this->image_unknown = (array_key_exists('bpfla_unknown_image', $options) ? (string)$options['bpfla_unknown_image'] : self::IMAGE_UNKNOWN);
 			$this->filter_priority = (array_key_exists('bpfla_filter_priority', $options) ? (int)$options['bpfla_filter_priority'] : self::FILTER_PRIORITY);				
-		}
-
-		// add stylesheets/scripts:
-		add_action('wp_enqueue_scripts', function(){
-			wp_enqueue_style('bpfla-style-handle', plugins_url('css/style.css', __FILE__));
-		});	
-
-		// add filter to get_avatar:
-		add_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority, 5); // this will only be used for anonymous WordPress comments (from non-users)
-
-		// add filter to bp_core_fetch_avatar:
-		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), $this->filter_priority, 1); // this is used for every avatar call except the anonymous comment posters
-
-		// when in admin, make sure first letter avatars are not displayed on discussion settings page:
-		if (is_admin()){
-			global $pagenow;
-			if ($pagenow == 'options-discussion.php'){
-				remove_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority);
-			}
 		}
 
 	}
@@ -236,83 +248,97 @@ class BuddyPress_First_Letter_Avatar {
 
 
 
-	public function set_buddypress_avatar($html_data = ''){
-
+	public function set_buddypress_avatar($html_data = '', $params = array()){
+		
+		if (empty($params)){ // data not supplied
+			return $html_data; // return original image
+		}
+		
+		// Create HTML object to get some data out of the image supplied:
 		$html_doc = new DOMDocument();
 		$html_doc->loadHTML($html_data);
 		$image = $html_doc->getElementsByTagName('img');
-		if (empty($image)){
+		if (empty($image)){ // if there is no image...
 			return $html_data;
 		}
 		
-		foreach ($image as $image_data){
-			$original_image = $image_data->getAttribute('src');
-			$size = $image_data->getAttribute('width');
-			$alt = $image_data->getAttribute('alt');
-			$foreign_alt1 = __('Profile picture of %s', 'buddypress');
-			$foreign_alt1 = str_replace('%s', '', $foreign_alt1);
-			$foreign_alt2 = __('Profile photo of %s', 'buddypress');
-			$foreign_alt2 = str_replace('%s', '', $foreign_alt2);
-			$foreign_alt3 = __('Profile Photo', 'buddypress');
-			if (stripos($alt, 'Profile picture of ') === 0){ // if our alt attribute has "profile picture of" in the beginning...
-				$name = str_replace('Profile picture of ', '', $alt);
-			} else if (stripos($alt, 'Profile photo of ') === 0){ // or profile photo of...
-				$name = str_replace('Profile photo of ', '', $alt);
-			} else if (stripos($alt, $foreign_alt1) !== false){
-				$name = str_replace($foreign_alt1, '', $alt);
-			} else if (stripos($alt, $foreign_alt2) !== false){
-				$name = str_replace($foreign_alt2, '', $alt);
-			} else if ($alt == $foreign_alt3){
-				if (is_user_logged_in()){
-					$user = get_user_by('id', get_current_user_id());
-					$name = $user->data->display_name;
-				} else {
-					$name = '';
-				}
-			} else if (!empty($alt)){ // if there is some problem - just assign alt to name
-				$name = $alt;
-			} else { // empty alt -> assign logged in user avatar
-				if (is_user_logged_in()){
-					$user = get_user_by('id', get_current_user_id());
-					$name = $user->data->display_name;
-				} else {
-					$name = '';
-				}
-			}
-		}
+		foreach ($image as $image_data){ // we are using foreach, but in fact there should be only one image
+			$original_image_url = $image_data->getAttribute('src'); // url of the original image
+			break; // this foreach loop should be exectued only once no matter what, since there is only one img tag, but just to be safe we are going to use break here
+		}		
 		
-		// something went wrong, just return what came in function argument:
-		if (empty($original_image) || empty($size) || empty($name) || empty($alt)){
-			return $html_data;
-		}
-
-		// if there is no gravatar URL, it means that user has set his own profile avatar,
-		// so we're gonna see if we should be using it;
-		// if we should, just return the input data and leave the avatar as it was:
-		if ($this->use_profile_avatar == true){
-			if (stripos($original_image, 'gravatar.com/avatar') === false){
-				return $html_data;
+		// these params are very well documented in BuddyPress' bp-core-avatar.php file:
+		$id = $params['item_id'];
+		$object = $params['object'];
+		$size = $params['width'];
+		$alt = $params['alt'];
+		$email = $params['email'];
+		
+		if ($object == 'user'){ // if we are filtering user's avatar
+			
+			// if there is no gravatar URL, it means that user has set his own profile avatar,
+			// so we're gonna see if we should be using it (user avatar);
+			// if we should, just return the input data and leave the avatar as it was:
+			if ($this->use_profile_avatar == true){
+				if (stripos($original_image_url, 'gravatar.com/avatar') === false){
+					return $html_data;
+				}
 			}
-		}
+			
+			if (empty($id) && $id !== 0){ // if id not specified (and id not equal 0)
+				if (is_user_logged_in()){ // if user logged in
+					$user = get_user_by('id', get_current_user_id());
+					$id = get_current_user_id(); // get current user's id
+				} else {
+					return $htm_data; // no id specified and user not logged in - return the original image
+				}
+			}
+			
+			$user = get_user_by('id', $id); // let's get user object from DB
+			
+			if (empty($size)){ // if for some reason size was not specified...
+				$size = 48; // just set it to 48
+			}
+			
+			if (empty($alt)){
+				$alt = __('Profile Photo', 'buddypress');
+			}
+			
+			if (empty($email)){ // if for some reason email was not specified
+				$email = $user->data->user_email; // get it by user id
+			}
+			
+			$name = $user->data->display_name;
+			if (empty($name)){
+				$name = bp_core_get_username($id); // BuddyPress fallback
+			}
+			if (empty($name)){
+				$name = $user->data->user_nicename; // another fallback (to WP nicename)
+			}
+			
+		} else if ($object == 'group'){
+		
+			// do something for group...
+			return $html_data;
+			
+		} else if ($object == 'blog'){
+			
+			// do something for blog...
+			return $html_data;			
+			
+		} else { // not user, not group and not blog - just return the input html image
+		
+			return $html_data;
+		
+		}		
+		
+		$first_letter_uri = $this->generate_first_letter_uri($name, $size); // get letter URL
 		
 		// check whether Gravatar should be used at all:
-		if ($this->use_gravatar == true){
-			if (stripos($original_image, 'gravatar.com/avatar') !== false){
-				$gravatar_uri = $this->generate_gravatar_uri_from_gravatar_url($original_image);
-			} else {
-				$user = get_user_by('slug', $name); // try to find user data by user nicename
-				if (!empty($user) && !empty($user->data->user_email)){
-					$email = $user->data->user_email;
-				} else {
-					$email = '';
-				}
-				$gravatar_uri = $this->generate_gravatar_uri($email, $size);
-			}			
-			$first_letter_uri = $this->generate_first_letter_uri($name, $size);
+		if ($this->use_gravatar == true && !empty($email)){ // if we should user gravatar and we have email
+			$gravatar_uri = $this->generate_gravatar_uri($email, $size);			
 			$avatar_uri = $gravatar_uri . '&default=' . urlencode($first_letter_uri);
-		} else {
-			// gravatar is not used:
-			$first_letter_uri = $this->generate_first_letter_uri($name, $size);
+		} else { // gravatar not used or we do not have email
 			$avatar_uri = $first_letter_uri;
 		}
 		
@@ -352,9 +378,14 @@ class BuddyPress_First_Letter_Avatar {
 		}
 
 		// create array with allowed character range (in this case it is a-z range):
-		$allowed_chars = range('a', 'z');
+		$allowed_letters = range('a', 'z');
+		$allowed_numbers = range(0, 9);
+		foreach ($allowed_numbers as $number){ // cast each item to string (strict param of in_array requires same type)
+			$allowed_numbers[$number] = (string)$number; 
+		}
+		$allowed_chars = array_merge($allowed_letters, $allowed_numbers);
 		// check if the file name meets the requirement; if it doesn't - set it to unknown
-		if (!in_array($file_name, $allowed_chars)){
+		if (!in_array($file_name, $allowed_chars, true)){
 			$file_name = $this->image_unknown;
 		}
 
@@ -382,7 +413,12 @@ class BuddyPress_First_Letter_Avatar {
 	}
 
 
-
+	/*
+	 * This method is not used, but I'm keeping it since it may be useful.
+	 * This method generates a clean gravatar URL from any kind of gravatar URL. It's useful, because it allows to control exactly how the Gravatar URL looks like.
+	 * It basically strips any parameters and makes sure that the gravatar URL always has the same format (for example https://secure.gravatar.com/avatar/)
+	 */
+	/*
 	private function generate_gravatar_uri_from_gravatar_url($gravatar_inital_uri){ // this method is needed to make sure we control how the gravatar uri looks like
 		
 		// before we start anything, we need to get the actual size from the displayed gravatar:
@@ -435,10 +471,13 @@ class BuddyPress_First_Letter_Avatar {
 		return $avatar_uri;
 
 	}
+	*/
 
 
-
-	private function generate_gravatar_uri($email, $size){
+	/*
+	 * This method generates full URL for Gravatar, according to the $email and $size provided
+	 */
+	private function generate_gravatar_uri($email, $size = '96'){
 
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)){ // if email not correct
 			$email = ''; // set it to empty string
@@ -465,4 +504,6 @@ $bp_first_letter_avatar = new BuddyPress_First_Letter_Avatar();
 // require back-end of the plugin
 if (is_admin() && !defined('DOING_AJAX')){
 	require_once 'buddypress-first-letter-avatar-config.php';
+	// create BuddyPress_First_Letter_Avatar_Config object:
+	$bp_first_letter_avatar_config = new BuddyPress_First_Letter_Avatar_Config();
 }
