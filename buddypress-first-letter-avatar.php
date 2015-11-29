@@ -141,9 +141,12 @@ class BuddyPress_First_Letter_Avatar {
 		}
 
 	}
+	
 
 
-
+	/*
+	 * Add Settings link to Plugins section
+	 */
 	public function add_settings_link($links){
 
 		// add localised Settings link do plugin settings on plugins page:
@@ -152,15 +155,18 @@ class BuddyPress_First_Letter_Avatar {
 		return $links;
 
 	}
+	
 
 
-
-	public function set_comment_avatar($avatar, $id_or_email, $size = '96', $default, $alt = ''){
+	/*
+	 * This method is used only for guest comments (BP filters do not filter guest avatars)
+	 * It returns a full HTML <img /> tag with avatar (first letter or Gravatar)
+	 */
+	public function set_comment_avatar($avatar, $id_or_email, $size = '96', $default = '', $alt = ''){
 
 		// create two main variables:
 		$name = '';
 		$email = '';
-
 		
 		if (is_object($id_or_email)){ // id_or_email can actually be also a comment object, so let's check it first
 			if (!empty($id_or_email->comment_ID)){
@@ -184,8 +190,8 @@ class BuddyPress_First_Letter_Avatar {
 				}
 			}
 
-			if (!empty($user) && is_object($user)){ // if commenter is a registered user...
-				$name = $user->data->display_name;
+			if (!empty($user) && is_object($user)){ // if commenter is a registered user... (technically it's not possible, since ...
+				$name = $user->data->display_name; // ... this method is only called when unregistered user writes comments, but it's still worth checking)
 				$email = $user->data->user_email;
 			} else if (is_string($id_or_email)){ // if string was supplied
 				if (!filter_var($email, FILTER_VALIDATE_EMAIL)){ // if it is NOT email, it must be a username
@@ -218,7 +224,6 @@ class BuddyPress_First_Letter_Avatar {
 			$email = get_comment_author_email();
 
 		}
-
 
 		if (empty($name)){ // if, for some reason, there is no name, use email instead
 			$name = $email;
@@ -344,10 +349,13 @@ class BuddyPress_First_Letter_Avatar {
 		return $avatar_img_output;
 
 	}
+	
 
 
-
-	private function generate_avatar_img_tag($avatar_uri, $size, $alt = '', $gravatar_uri = ''){
+	/*
+	 * Generate full HTML <img /> tag with avatar URL, size, CSS classes etc.
+	 */
+	private function generate_avatar_img_tag($avatar_uri, $size, $alt = ''){
 
 		// prepare extra classes for <img> tag depending on plugin settings:
 		$extra_img_class = '';
@@ -361,9 +369,13 @@ class BuddyPress_First_Letter_Avatar {
 		return $output_data;
 
 	}
+	
 
 
-
+	/*
+	 * This method generates full URL for letter avatar (for example http://yourblog.com/wp-content/plugins/wp-first-letter-avatar/images/default/96/k.png),
+	 * according to the $name and $size provided
+	 */
 	private function generate_first_letter_uri($username, $size){
 
 		// get picture filename (and lowercase it) from commenter name:
@@ -409,67 +421,7 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-	/*
-	 * This method is not used, but I'm keeping it since it may be useful.
-	 * This method generates a clean gravatar URL from any kind of gravatar URL. It's useful, because it allows to control exactly how the Gravatar URL looks like.
-	 * It basically strips any parameters and makes sure that the gravatar URL always has the same format (for example https://secure.gravatar.com/avatar/)
-	 */
-	/*
-	private function generate_gravatar_uri_from_gravatar_url($gravatar_inital_uri){ // this method is needed to make sure we control how the gravatar uri looks like
-		
-		// before we start anything, we need to get the actual size from the displayed gravatar:
-		$url_parts = parse_url($gravatar_inital_uri);
-		if (!empty($url_parts['query'])){
-			parse_str($url_parts['query'], $url_query);
-			if (!empty($url_query['s'])){
-				$size = $url_query['s'];
-			} else if (!empty($url_query['size'])){
-				$size = $url_query['size'];
-			} else {
-				$size = '96';
-			}		
-		} else {
-			$size = '96';
-		}
-		
-		// first let's strip all get parameters:
-		$gravatar_uri_array = explode('?', $gravatar_inital_uri);
-		$gravatar_uri = $gravatar_uri_array[0];
-
-		$gravatar_uri = strtolower($gravatar_uri); // lowercase the whole url
-		
-		$possible_starts = array( // possible ways of how the url may start
-			'https://secure.gravatar.com/avatar/',
-			'https://www.gravatar.com/avatar/',
-			'https://gravatar.com/avatar/',
-			'http://secure.gravatar.com/avatar/',
-			'http://www.gravatar.com/avatar/',
-			'http://gravatar.com/avatar/',
-			'//secure.gravatar.com/avatar/',
-			'//www.gravatar.com/avatar/',
-			'//gravatar.com/avatar/'
-		);
-		
-		$gravatar_hash = '';
-		
-		foreach ($possible_starts as $possible_start){
-			if (strpos($gravatar_uri, $possible_start) === 0){ // if starts with this string...
-				$gravatar_hash = str_replace($possible_start, '', $gravatar_uri); // we need to remove the possible url beginning, so that we are left with just the md5 gravatar hash
-				break; // since we have found what we needed, we can cancel loop execution
-			}
-		}
-		
-		// now we have the just the md5 hash, so we can construct the gravatar uri exactly the way we want:
-		$avatar_uri = self::GRAVATAR_URL;
-		$avatar_uri .= $gravatar_hash;
-		$avatar_uri .= "?s={$size}&r=g";
-
-		return $avatar_uri;
-
-	}
-	*/
-
+	
 
 	/*
 	 * This method generates full URL for Gravatar, according to the $email and $size provided
@@ -489,6 +441,67 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
+	
+
+	/*
+	 * This method is not used, but I'm keeping it since it may be useful.
+	 * This method generates a clean gravatar URL from any kind of gravatar URL. It's useful, because it allows to control exactly how the Gravatar URL looks like.
+	 * It basically strips any parameters and makes sure that the gravatar URL always has the same format (for example https://secure.gravatar.com/avatar/)
+	 */
+	/*
+	private function generate_gravatar_uri_from_gravatar_url($gravatar_inital_uri){ // this method is needed to make sure we control how the gravatar uri looks like
+	
+	// before we start anything, we need to get the actual size from the displayed gravatar:
+	$url_parts = parse_url($gravatar_inital_uri);
+	if (!empty($url_parts['query'])){
+	parse_str($url_parts['query'], $url_query);
+	if (!empty($url_query['s'])){
+	$size = $url_query['s'];
+	} else if (!empty($url_query['size'])){
+	$size = $url_query['size'];
+	} else {
+	$size = '96';
+	}		
+	} else {
+	$size = '96';
+	}
+	
+	// first let's strip all get parameters:
+	$gravatar_uri_array = explode('?', $gravatar_inital_uri);
+	$gravatar_uri = $gravatar_uri_array[0];
+
+	$gravatar_uri = strtolower($gravatar_uri); // lowercase the whole url
+	
+	$possible_starts = array( // possible ways of how the url may start
+	'https://secure.gravatar.com/avatar/',
+	'https://www.gravatar.com/avatar/',
+	'https://gravatar.com/avatar/',
+	'http://secure.gravatar.com/avatar/',
+	'http://www.gravatar.com/avatar/',
+	'http://gravatar.com/avatar/',
+	'//secure.gravatar.com/avatar/',
+	'//www.gravatar.com/avatar/',
+	'//gravatar.com/avatar/'
+	);
+	
+	$gravatar_hash = '';
+	
+	foreach ($possible_starts as $possible_start){
+	if (strpos($gravatar_uri, $possible_start) === 0){ // if starts with this string...
+	$gravatar_hash = str_replace($possible_start, '', $gravatar_uri); // we need to remove the possible url beginning, so that we are left with just the md5 gravatar hash
+	break; // since we have found what we needed, we can cancel loop execution
+	}
+	}
+	
+	// now we have the just the md5 hash, so we can construct the gravatar uri exactly the way we want:
+	$avatar_uri = self::GRAVATAR_URL;
+	$avatar_uri .= $gravatar_hash;
+	$avatar_uri .= "?s={$size}&r=g";
+
+	return $avatar_uri;
+
+	}
+	 */	
 	
 	
 }
