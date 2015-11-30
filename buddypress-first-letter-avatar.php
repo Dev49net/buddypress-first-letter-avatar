@@ -250,6 +250,10 @@ class BuddyPress_First_Letter_Avatar {
 
 
 
+	/*
+	 * This method is used to filter every avatar, except for anonymous comments.
+	 * It returns full <img /> HTML tag
+	 */
 	public function set_buddypress_avatar($html_data = '', $params = array()){
 		
 		if (empty($params)){ // data not supplied
@@ -282,7 +286,7 @@ class BuddyPress_First_Letter_Avatar {
 			// so we're gonna see if we should be using it (user avatar);
 			// if we should, just return the input data and leave the avatar as it was:
 			if ($this->use_profile_avatar == true){
-				if (stripos($original_image_url, 'gravatar.com/avatar') === false){
+				if (stripos($original_image_url, 'gravatar.com/avatar') === false){ // we need to specifically check for false (hence '===')
 					return $html_data;
 				}
 			}
@@ -292,7 +296,7 @@ class BuddyPress_First_Letter_Avatar {
 					$user = get_user_by('id', get_current_user_id());
 					$id = get_current_user_id(); // get current user's id
 				} else {
-					return $htm_data; // no id specified and user not logged in - return the original image
+					return $html_data; // no id specified and user not logged in - return the original image
 				}
 			}
 			
@@ -318,15 +322,45 @@ class BuddyPress_First_Letter_Avatar {
 				$name = $user->data->user_nicename; // another fallback (to WP nicename)
 			}
 			
-		} else if ($object == 'group'){
+		} else if ($object == 'group'){ // we're filtering group
+			
+			if (empty($id) && $id !== 0){ // if for some reason there is no id
+				return $html_data;
+			}
 		
-			// do something for group...
-			return $html_data;
+			$group = groups_get_group(array('group_id' => $id)); // get the Group object by ID
 			
-		} else if ($object == 'blog'){
+			if (empty($group)){ // if for some reason group is empty/does not exist/etc.
+				return $html_data; // return the input data
+			}
 			
-			// do something for blog...
-			return $html_data;			
+			// we are using the same way to determine whether group has avatar set as we did with user avatars
+			// if there is no gravatar URL, it means that group has their own avatar,
+			// so we're gonna see if we should be using it (user/group avatar);
+			// if we should, just return the input data and leave the avatar as it was:
+			if ($this->use_profile_avatar == true){
+				if (stripos($original_image_url, 'gravatar.com/avatar') === false){ // we need to specifically check for false (hence '===')
+					return $html_data;
+				}
+			}
+			
+			if (empty($group->name)){ // if for some reason there is no name
+				return $html_data;
+			}
+			
+			$name = $group->name;
+			
+			if (empty($size)){ // if for some reason size was not specified...
+				$size = 96; // just set it to 96
+			}
+			
+			if (empty($alt)){
+				$alt = __('Group logo of %s', 'buddypress');
+			}
+						
+		} else if ($object == 'blog'){ // we're filtering blog
+			
+			return $html_data;	// this feature is not used at all, so just return the input parameter
 			
 		} else { // not user, not group and not blog - just return the input html image
 		
