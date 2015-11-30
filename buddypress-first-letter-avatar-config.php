@@ -87,7 +87,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_use_profile_avatar',
-			'Use users\' profile avatars<br/>Default: check',
+			'Use users\' and groups\' avatars<br/>Default: check',
 			array($this, 'use_profile_avatar_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -230,8 +230,8 @@ class BuddyPress_First_Letter_Avatar_Config {
 				Directory where your avatars are stored.
 			</p>
 			<p>
-				<strong>Use users' profile avatars</strong><br />
-				<span style="text-decoration: underline">Check</span>: use user's profile avatar when available; <span style="text-decoration: underline">Uncheck</span>: use Gravatar or custom avatars.
+				<strong>Use users' and groups' avatars</strong><br />
+				<span style="text-decoration: underline">Check</span>: use user's and group's avatar when available; <span style="text-decoration: underline">Uncheck</span>: use Gravatar or custom avatars.
 			</p>
 			<p>
 				<strong>Use Gravatar</strong><br />
