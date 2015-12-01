@@ -85,6 +85,7 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 * Fixed group avatars issue
 * Improved BuddyPress compatibility
 * Slightly improved performance
+* WordPress 4.4 ready
 * Small fix: changed description of filter priority value in settings (thanks to **@yolandal**)
 
 = 2.1.1 =
