@@ -78,6 +78,15 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 
 == Changelog ==
 
+= 2.2 =
+* Added support for numbers
+* Added support for Cyrillic script (huge thanks to **@collex**)
+* Removed error message if BuddyPress is not activated
+* Fixed group avatars issue
+* Improved BuddyPress compatibility
+* Slightly improved performance
+* Small fix: changed description of filter priority value in settings (thanks to **@yolandal**)
+
 = 2.1.1 =
 * Fixed minor Gravatar compatibility issue
 * Improved coding style (resulting in possibly slightly better performance)
@@ -124,6 +133,9 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 * First BuddyPress First Letter Avatar release
 
 == Upgrade Notice ==
+
+= 2.2 =
+Added support for numbers and improved performance. Update recommended.
 
 = 2.1.1 =
 Improved reliability. Update recommended.
