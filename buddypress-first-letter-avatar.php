@@ -56,35 +56,7 @@ class BuddyPress_First_Letter_Avatar {
 
 
 
-	public function __construct(){
-
-		/* --------------- WP HOOKS --------------- */
-
-		// add Settings link to plugins page:
-		add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_settings_link'));
-
-		// add plugin activation hook:
-		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
-
-		// add stylesheets/scripts:
-		add_action('wp_enqueue_scripts', function(){
-			wp_enqueue_style('bpfla-style-handle', plugins_url('css/style.css', __FILE__));
-		});	
-
-		// add filter to get_avatar:
-		add_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority, 5); // this will only be used for anonymous WordPress comments (from non-users)
-
-		// add filter to bp_core_fetch_avatar:
-		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), $this->filter_priority, 2); // this is used for every avatar call except the anonymous comment posters
-
-		// when in admin, make sure first letter avatars are not displayed on discussion settings page:
-		if (is_admin()){
-			global $pagenow;
-			if ($pagenow == 'options-discussion.php'){
-				remove_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority);
-			}
-		}
-		
+	public function __construct(){		
 
 		/* --------------- CONFIGURATION --------------- */
 
@@ -113,6 +85,34 @@ class BuddyPress_First_Letter_Avatar {
 			$this->round_avatars = (array_key_exists('bpfla_round_avatars', $options) ? (bool)$options['bpfla_round_avatars'] : false);
 			$this->image_unknown = (array_key_exists('bpfla_unknown_image', $options) ? (string)$options['bpfla_unknown_image'] : self::IMAGE_UNKNOWN);
 			$this->filter_priority = (array_key_exists('bpfla_filter_priority', $options) ? (int)$options['bpfla_filter_priority'] : self::FILTER_PRIORITY);				
+		}
+	
+
+		/* --------------- WP HOOKS --------------- */
+
+		// add Settings link to plugins page:
+		add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_settings_link'));
+
+		// add plugin activation hook:
+		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
+
+		// add stylesheets/scripts:
+		add_action('wp_enqueue_scripts', function(){
+			wp_enqueue_style('bpfla-style-handle', plugins_url('css/style.css', __FILE__));
+		});	
+
+		// add filter to get_avatar:
+		add_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority, 5); // this will only be used for anonymous WordPress comments (from non-users)
+
+		// add filter to bp_core_fetch_avatar:
+		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), $this->filter_priority, 2); // this is used for every avatar call except the anonymous comment posters
+
+		// when in admin, make sure first letter avatars are not displayed on discussion settings page:
+		if (is_admin()){
+			global $pagenow;
+			if ($pagenow == 'options-discussion.php'){
+				remove_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority);
+			}
 		}
 
 	}
