@@ -218,7 +218,7 @@ class BuddyPress_First_Letter_Avatar {
 				}
 			}
 
-		} else { // if it's a standard comment, use basic comment properties and/or functions to retrive info
+		} else { // if it's a standard comment, use basic comment functions to retrive info
 
 			$comment = $id_or_email;
 			
@@ -233,6 +233,8 @@ class BuddyPress_First_Letter_Avatar {
 			} else {
 				$email = get_comment_author_email();
 			}
+
+		}
 
 		if (empty($name)){ // if, for some reason, there is no name, use email instead
 			$name = $email;
@@ -427,6 +429,8 @@ class BuddyPress_First_Letter_Avatar {
 		} else {
 			$file_name = substr($name, $this->letter_index, 1); // get one letter counting from letter_index
 			$file_name = strtolower($file_name); // lowercase it...
+			$file_name_mb = mb_substr($name, $this->letter_index, 1); // repeat, this time with multibyte functions
+			$file_name_mb = mb_strtolower($file_name_mb); // and again...
 		}
 
 		// create arrays with allowed character ranges:
@@ -436,8 +440,9 @@ class BuddyPress_First_Letter_Avatar {
 		}
 		$allowed_letters_latin = range('a', 'z');
 		$allowed_letters_cyrillic = range('а', 'ё');
+		$allowed_letters_arabic = range('آ', 'ی');
 		// check if the file name meets the requirement; if it doesn't - set it to unknown
-		$charset_flag = ''; // this will be used to determine whether we are using latin chars, cyrillic chars or numbers
+		$charset_flag = ''; // this will be used to determine whether we are using latin chars, cyrillic chars, arabic chars or numbers
 		// check whther we are using latin/cyrillic/numbers and set the flag, so we can later act appropriately:
 		if (in_array($file_name, $allowed_numbers, true)){
 			$charset_flag = 'number'; 
@@ -445,6 +450,8 @@ class BuddyPress_First_Letter_Avatar {
 			$charset_flag = 'latin'; 
 		} else if (in_array($file_name, $allowed_letters_cyrillic, true)){
 			$charset_flag = 'cyrillic'; 
+		} else if (in_array($file_name, $allowed_letters_arabic, true)){
+			$charset_flag = 'arabic'; 
 		} else { // for some reason none of the charset is appropriate
 			$file_name = $this->image_unknown; // set it to uknknown
 		}
@@ -457,14 +464,13 @@ class BuddyPress_First_Letter_Avatar {
 				case 'latin':
 					$file_name = 'latin_' . $file_name;
 					break;
-				case 'cyrillic':
-					// below line is used to convert cyrillic char to unicode number (because cyrillic letters are stored
-					// as decimal unicode codes for each letter to avoid problems with non-ASCII filenames)					
-					// We're getting back to $name again, since we need to treat it a bit differently (with multibyte 
-					// operations) in order to pass it to iconv() and get proper code point value
-					$file_name_mb = mb_strtolower(mb_substr($name, $this->letter_index, 1));
+				case 'cyrillic':					
 					$unicode_code_point = unpack('V', iconv('UTF-8', 'UCS-4LE', $file_name_mb))[1]; // beautiful one-liner by @bobince from SO - http://stackoverflow.com/a/27444149/4848918
 					$file_name = 'cyrillic_' . $unicode_code_point;
+					break;
+				case 'arabic':
+					$unicode_code_point = unpack('V', iconv('UTF-8', 'UCS-4LE', $file_name_mb))[1]; 
+					$file_name = 'arabic_' . $unicode_code_point;
 					break;
 				default: // some weird flag has been set for unknown reason :-)
 					$file_name = $this->image_unknown; // set it to uknknown
