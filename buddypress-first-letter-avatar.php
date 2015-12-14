@@ -19,8 +19,8 @@
 
 
 // Exit if accessed directly:
-if (!defined('ABSPATH')){
-    exit;
+if (!defined('ABSPATH')){ 
+    exit; 
 }
 
 
@@ -43,7 +43,7 @@ class BuddyPress_First_Letter_Avatar {
 	const ROUND_AVATARS = false;     // TRUE: use rounded avatars; FALSE: dont use round avatars
 	const IMAGE_UNKNOWN = 'mystery';    // file name (without extension) of the avatar used for users with usernames beginning with symbol other than one from a-z range
 	const FILTER_PRIORITY = 10;  // plugin filter priority
-
+	
 	// properties duplicating const values (will be changed in constructor after reading config from DB):
 	private $use_profile_avatar = self::USE_PROFILE_AVATAR;
 	private $use_gravatar = self::USE_GRAVATAR;
@@ -56,7 +56,7 @@ class BuddyPress_First_Letter_Avatar {
 
 
 
-	public function __construct(){
+	public function __construct(){		
 
 		/* --------------- CONFIGURATION --------------- */
 
@@ -77,16 +77,16 @@ class BuddyPress_First_Letter_Avatar {
 			add_option('bpfla_settings', $initial_settings);
 		} else { // there are records in DB for our plugin
 			// and then assign them to our class properties (only if exsits in array):
-			$this->use_profile_avatar = (array_key_exists('bpfla_use_profile_avatar', $options) ? (bool)$options['bpfla_use_profile_avatar'] : false);
+			$this->use_profile_avatar = (array_key_exists('bpfla_use_profile_avatar', $options) ? (bool)$options['bpfla_use_profile_avatar'] : false); 
 			$this->use_gravatar = (array_key_exists('bpfla_use_gravatar', $options) ? (bool)$options['bpfla_use_gravatar'] : false);
 			$this->avatar_set = (array_key_exists('bpfla_avatar_set', $options) ? (string)$options['bpfla_avatar_set'] : self::AVATAR_SET);
 			$this->letter_index = (array_key_exists('bpfla_letter_index', $options) ? (int)$options['bpfla_letter_index'] : self::LETTER_INDEX);
 			$this->images_format = (array_key_exists('bpfla_file_format', $options) ? (string)$options['bpfla_file_format'] : self::IMAGES_FORMAT);
 			$this->round_avatars = (array_key_exists('bpfla_round_avatars', $options) ? (bool)$options['bpfla_round_avatars'] : false);
 			$this->image_unknown = (array_key_exists('bpfla_unknown_image', $options) ? (string)$options['bpfla_unknown_image'] : self::IMAGE_UNKNOWN);
-			$this->filter_priority = (array_key_exists('bpfla_filter_priority', $options) ? (int)$options['bpfla_filter_priority'] : self::FILTER_PRIORITY);
+			$this->filter_priority = (array_key_exists('bpfla_filter_priority', $options) ? (int)$options['bpfla_filter_priority'] : self::FILTER_PRIORITY);				
 		}
-
+	
 
 		/* --------------- WP HOOKS --------------- */
 
@@ -99,16 +99,13 @@ class BuddyPress_First_Letter_Avatar {
 		// add stylesheets/scripts:
 		add_action('wp_enqueue_scripts', function(){
 			wp_enqueue_style('bpfla-style-handle', plugins_url('css/style.css', __FILE__));
-		});
+		});	
 
 		// add filter to get_avatar:
 		add_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority, 5); // this will only be used for anonymous WordPress comments (from non-users)
 
 		// add filter to bp_core_fetch_avatar:
 		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), $this->filter_priority, 2); // this is used for every avatar call except the anonymous comment posters
-
-        // add filter for wpDiscuz:
-		add_filter('wpdiscuz_author_avatar_field', array($this, 'set_wpdiscuz_avatar'), $this->filter_priority, 4);
 
 		// when in admin, make sure first letter avatars are not displayed on discussion settings page:
 		if (is_admin()){
@@ -119,7 +116,7 @@ class BuddyPress_First_Letter_Avatar {
 		}
 
 	}
-
+	
 
 
 	/*
@@ -144,7 +141,7 @@ class BuddyPress_First_Letter_Avatar {
 		}
 
 	}
-
+	
 
 
 	/*
@@ -158,25 +155,11 @@ class BuddyPress_First_Letter_Avatar {
 		return $links;
 
 	}
-
-
-
-	/*
-     * This is method is used to filter wpDiscuz parameter - it feeds $comment object to get_avatar() function
-     * (more on line 102 in wpdiscuz/templates/comment/class.WpdiscuzWalker.php)
-     */
-	public function set_wpdiscuz_avatar($author_avatar_field, $comment, $user, $profile_url){
-
-        // that's all we need - instead of user ID or guest email supplied in
-        // $author_avatar_field, we just need to return the $comment object
-		return $comment;
-
-	}
-
+	
 
 
 	/*
-     * This method is used only for guest comments (BP filters do not filter guest avatars)
+	 * This method is used only for guest comments (BP filters do not filter guest avatars)
 	 * It returns a full HTML <img /> tag with avatar (first letter or Gravatar)
 	 */
 	public function set_comment_avatar($avatar, $id_or_email, $size = '96', $default = '', $alt = ''){
@@ -184,7 +167,7 @@ class BuddyPress_First_Letter_Avatar {
 		// create two main variables:
 		$name = '';
 		$email = '';
-
+		
 		if (is_object($id_or_email)){ // id_or_email can actually be also a comment object, so let's check it first
 			if (!empty($id_or_email->comment_ID)){
 				$comment_id = $id_or_email->comment_ID; // it is a comment object and we can take the ID
@@ -216,7 +199,7 @@ class BuddyPress_First_Letter_Avatar {
 				} else { // it must be email
 					$email = $id_or_email;
 					$user = get_user_by('email', $email);
-				}
+				}	
 			} else { // if commenter is not a registered user, we have to try various fallbacks
 				$post_id = get_the_ID();
 				if ($post_id !== null){ // if this actually is a post...
@@ -238,13 +221,13 @@ class BuddyPress_First_Letter_Avatar {
 		} else { // if it's a standard comment, use basic comment functions to retrive info
 
 			$comment = $id_or_email;
-
+			
 			if (!empty($comment->comment_author)){
 				$name = $comment->comment_author;
 			} else {
 				$name = get_comment_author();
 			}
-
+			
 			if (!empty($comment->comment_author_email)){
 				$email = $comment->comment_author_email;
 			} else {
@@ -257,8 +240,8 @@ class BuddyPress_First_Letter_Avatar {
 			$name = $email;
 		} else if (empty($email)){ // and if no email, use user/guest name
 			$email = $name;
-		}
-
+		}		
+		
 		// check whether Gravatar should be used at all:
 		if ($this->use_gravatar == true){
 			$gravatar_uri = $this->generate_gravatar_uri($email, $size);
@@ -269,7 +252,7 @@ class BuddyPress_First_Letter_Avatar {
 			$first_letter_uri = $this->generate_first_letter_uri($name, $size);
 			$avatar_uri = $first_letter_uri;
 		}
-
+		
 		$avatar_img_output = $this->generate_avatar_img_tag($avatar_uri, $size, $alt); // get final <img /> tag for the avatar/gravatar
 
 		return $avatar_img_output;
@@ -283,11 +266,11 @@ class BuddyPress_First_Letter_Avatar {
 	 * It returns full <img /> HTML tag
 	 */
 	public function set_buddypress_avatar($html_data = '', $params = array()){
-
+		
 		if (empty($params)){ // data not supplied
 			return $html_data; // return original image
 		}
-
+		
 		// Create HTML object to get some data out of the image supplied:
 		$html_doc = new DOMDocument();
 		$html_doc->loadHTML($html_data);
@@ -295,21 +278,21 @@ class BuddyPress_First_Letter_Avatar {
 		if (empty($image)){ // if there is no image...
 			return $html_data;
 		}
-
+		
 		foreach ($image as $image_data){ // we are using foreach, but in fact there should be only one image
 			$original_image_url = $image_data->getAttribute('src'); // url of the original image
 			break; // this foreach loop should be exectued only once no matter what, since there is only one img tag, but just to be safe we are going to use break here
-		}
-
+		}		
+		
 		// these params are very well documented in BuddyPress' bp-core-avatar.php file:
 		$id = $params['item_id'];
 		$object = $params['object'];
 		$size = $params['width'];
 		$alt = $params['alt'];
 		$email = $params['email'];
-
+		
 		if ($object == 'user'){ // if we are filtering user's avatar
-
+			
 			// if there is no gravatar URL, it means that user has set his own profile avatar,
 			// so we're gonna see if we should be using it (user avatar);
 			// if we should, just return the input data and leave the avatar as it was:
@@ -318,7 +301,7 @@ class BuddyPress_First_Letter_Avatar {
 					return $html_data;
 				}
 			}
-
+			
 			if (empty($id) && $id !== 0){ // if id not specified (and id not equal 0)
 				if (is_user_logged_in()){ // if user logged in
 					$user = get_user_by('id', get_current_user_id());
@@ -327,21 +310,21 @@ class BuddyPress_First_Letter_Avatar {
 					return $html_data; // no id specified and user not logged in - return the original image
 				}
 			}
-
+			
 			$user = get_user_by('id', $id); // let's get user object from DB
-
+			
 			if (empty($size)){ // if for some reason size was not specified...
 				$size = 48; // just set it to 48
 			}
-
+			
 			if (empty($alt)){
 				$alt = __('Profile Photo', 'buddypress');
 			}
-
+			
 			if (empty($email)){ // if for some reason email was not specified
 				$email = $user->data->user_email; // get it by user id
 			}
-
+			
 			$name = $user->data->display_name;
 			if (empty($name)){
 				$name = bp_core_get_username($id); // BuddyPress fallback
@@ -349,19 +332,19 @@ class BuddyPress_First_Letter_Avatar {
 			if (empty($name)){
 				$name = $user->data->user_nicename; // another fallback (to WP nicename)
 			}
-
+			
 		} else if ($object == 'group'){ // we're filtering group
-
+			
 			if (empty($id) && $id !== 0){ // if for some reason there is no id
 				return $html_data;
 			}
-
+		
 			$group = groups_get_group(array('group_id' => $id)); // get the Group object by ID
-
+			
 			if (empty($group)){ // if for some reason group is empty/does not exist/etc.
 				return $html_data; // return the input data
 			}
-
+			
 			// we are using the same way to determine whether group has avatar set as we did with user avatars
 			// if there is no gravatar URL, it means that group has their own avatar,
 			// so we're gonna see if we should be using it (user/group avatar);
@@ -371,47 +354,47 @@ class BuddyPress_First_Letter_Avatar {
 					return $html_data;
 				}
 			}
-
+			
 			if (empty($group->name)){ // if for some reason there is no name
 				return $html_data;
 			}
-
+			
 			$name = $group->name;
-
+			
 			if (empty($size)){ // if for some reason size was not specified...
 				$size = 96; // just set it to 96
 			}
-
+			
 			if (empty($alt)){
 				$alt = __('Group logo of %s', 'buddypress');
 			}
-
+						
 		} else if ($object == 'blog'){ // we're filtering blog
-
+			
 			return $html_data;	// this feature is not used at all, so just return the input parameter
-
+			
 		} else { // not user, not group and not blog - just return the input html image
-
+		
 			return $html_data;
-
-		}
-
+		
+		}		
+		
 		$first_letter_uri = $this->generate_first_letter_uri($name, $size); // get letter URL
-
+		
 		// check whether Gravatar should be used at all:
 		if ($this->use_gravatar == true && !empty($email)){ // if we should user gravatar and we have email
-			$gravatar_uri = $this->generate_gravatar_uri($email, $size);
+			$gravatar_uri = $this->generate_gravatar_uri($email, $size);			
 			$avatar_uri = $gravatar_uri . '&default=' . urlencode($first_letter_uri);
 		} else { // gravatar not used or we do not have email
 			$avatar_uri = $first_letter_uri;
 		}
-
+		
 		$avatar_img_output = $this->generate_avatar_img_tag($avatar_uri, $size, $alt); // get final <img /> tag for the avatar/gravatar
 
 		return $avatar_img_output;
 
 	}
-
+	
 
 
 	/*
@@ -431,7 +414,7 @@ class BuddyPress_First_Letter_Avatar {
 		return $output_data;
 
 	}
-
+	
 
 
 	/*
@@ -453,7 +436,7 @@ class BuddyPress_First_Letter_Avatar {
 		// create arrays with allowed character ranges:
 		$allowed_numbers = range(0, 9);
 		foreach ($allowed_numbers as $number){ // cast each item to string (strict param of in_array requires same type)
-			$allowed_numbers[$number] = (string)$number;
+			$allowed_numbers[$number] = (string)$number; 
 		}
 		$allowed_letters_latin = range('a', 'z');
 		$allowed_letters_cyrillic = range('а', 'ё');
@@ -462,17 +445,17 @@ class BuddyPress_First_Letter_Avatar {
 		$charset_flag = ''; // this will be used to determine whether we are using latin chars, cyrillic chars, arabic chars or numbers
 		// check whther we are using latin/cyrillic/numbers and set the flag, so we can later act appropriately:
 		if (in_array($file_name, $allowed_numbers, true)){
-			$charset_flag = 'number';
+			$charset_flag = 'number'; 
 		} else if (in_array($file_name, $allowed_letters_latin, true)){
-			$charset_flag = 'latin';
+			$charset_flag = 'latin'; 
 		} else if (in_array($file_name, $allowed_letters_cyrillic, true)){
-			$charset_flag = 'cyrillic';
+			$charset_flag = 'cyrillic'; 
 		} else if (in_array($file_name, $allowed_letters_arabic, true)){
-			$charset_flag = 'arabic';
+			$charset_flag = 'arabic'; 
 		} else { // for some reason none of the charset is appropriate
 			$file_name = $this->image_unknown; // set it to uknknown
 		}
-
+		
 		if (!empty($charset_flag)){ // if charset_flag is not empty, i.e. flag has been set to latin, number or cyrillic...
 			switch ($charset_flag){ // run through various options to determine the actual filename for the letter avatar
 				case 'number':
@@ -481,19 +464,19 @@ class BuddyPress_First_Letter_Avatar {
 				case 'latin':
 					$file_name = 'latin_' . $file_name;
 					break;
-				case 'cyrillic':
+				case 'cyrillic':					
 					$unicode_code_point = unpack('V', iconv('UTF-8', 'UCS-4LE', $file_name_mb))[1]; // beautiful one-liner by @bobince from SO - http://stackoverflow.com/a/27444149/4848918
 					$file_name = 'cyrillic_' . $unicode_code_point;
 					break;
 				case 'arabic':
-					$unicode_code_point = unpack('V', iconv('UTF-8', 'UCS-4LE', $file_name_mb))[1];
+					$unicode_code_point = unpack('V', iconv('UTF-8', 'UCS-4LE', $file_name_mb))[1]; 
 					$file_name = 'arabic_' . $unicode_code_point;
 					break;
 				default: // some weird flag has been set for unknown reason :-)
 					$file_name = $this->image_unknown; // set it to uknknown
 					break;
 			}
-		}
+		}		
 
 		// detect most appropriate size based on WP avatar size:
 		if ($size <= 48) $custom_avatar_size = '48';
@@ -512,13 +495,13 @@ class BuddyPress_First_Letter_Avatar {
 			. $custom_avatar_size . '/'
 			. $file_name . '.'
 			. $this->images_format;
-
+		
 		// return the final first letter image url:
 		return $avatar_uri;
 
 	}
 
-
+	
 
 	/*
 	 * This method generates full URL for Gravatar, according to the $email and $size provided
@@ -538,7 +521,7 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
+	
 
 	/*
 	 * This method is not used, but I'm keeping it since it may be useful.
@@ -547,7 +530,7 @@ class BuddyPress_First_Letter_Avatar {
 	 */
 	/*
 	private function generate_gravatar_uri_from_gravatar_url($gravatar_inital_uri){ // this method is needed to make sure we control how the gravatar uri looks like
-
+	
 	// before we start anything, we need to get the actual size from the displayed gravatar:
 	$url_parts = parse_url($gravatar_inital_uri);
 	if (!empty($url_parts['query'])){
@@ -558,17 +541,17 @@ class BuddyPress_First_Letter_Avatar {
 	$size = $url_query['size'];
 	} else {
 	$size = '96';
-	}
+	}		
 	} else {
 	$size = '96';
 	}
-
+	
 	// first let's strip all get parameters:
 	$gravatar_uri_array = explode('?', $gravatar_inital_uri);
 	$gravatar_uri = $gravatar_uri_array[0];
 
 	$gravatar_uri = strtolower($gravatar_uri); // lowercase the whole url
-
+	
 	$possible_starts = array( // possible ways of how the url may start
 	'https://secure.gravatar.com/avatar/',
 	'https://www.gravatar.com/avatar/',
@@ -580,16 +563,16 @@ class BuddyPress_First_Letter_Avatar {
 	'//www.gravatar.com/avatar/',
 	'//gravatar.com/avatar/'
 	);
-
+	
 	$gravatar_hash = '';
-
+	
 	foreach ($possible_starts as $possible_start){
 	if (strpos($gravatar_uri, $possible_start) === 0){ // if starts with this string...
 	$gravatar_hash = str_replace($possible_start, '', $gravatar_uri); // we need to remove the possible url beginning, so that we are left with just the md5 gravatar hash
 	break; // since we have found what we needed, we can cancel loop execution
 	}
 	}
-
+	
 	// now we have the just the md5 hash, so we can construct the gravatar uri exactly the way we want:
 	$avatar_uri = self::GRAVATAR_URL;
 	$avatar_uri .= $gravatar_hash;
@@ -598,9 +581,9 @@ class BuddyPress_First_Letter_Avatar {
 	return $avatar_uri;
 
 	}
-	 */
-
-
+	 */	
+	
+	
 }
 
 
