@@ -97,9 +97,7 @@ class BuddyPress_First_Letter_Avatar {
 		register_activation_hook(__FILE__, array($this, 'plugin_activate'));
 
 		// add stylesheets/scripts:
-		add_action('wp_enqueue_scripts', function(){
-			wp_enqueue_style('bpfla-style-handle', plugins_url('css/style.css', __FILE__));
-		});
+		add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
 
 		// add filter to get_avatar:
 		add_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority, 5); // this will only be used for anonymous WordPress comments (from non-users)
@@ -117,6 +115,17 @@ class BuddyPress_First_Letter_Avatar {
 				remove_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority);
 			}
 		}
+
+	}
+
+
+
+	/*
+	 * Add scripts and stylesheets
+	 */
+	public function enqueue_scripts(){
+
+		wp_enqueue_style('wpfla-style-handle', plugins_url('css/style.css', __FILE__));
 
 	}
 
