@@ -48,14 +48,14 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		 add_settings_section(
 			'bpfla_pluginPage_section',
-			'Plugin configuration',
+			__('Plugin configuration', 'buddypress-first-letter-avatar'),
 			array($this, 'settings_section_callback'),
 			'bpfla_pluginPage'
 		);
 
 		add_settings_field(
 			'bpfla_letter_index',
-			'Letter index<br/>Default: 0',
+			__('Letter index', 'buddypress-first-letter-avatar') . '<br/>' . __('Default:', 'buddypress-first-letter-avatar') . ' 0',
 			array($this, 'letter_index_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -63,7 +63,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_file_format',
-			'File format<br/>Default: png',
+			__('File format', 'buddypress-first-letter-avatar') . '<br/>' . __('Default:', 'buddypress-first-letter-avatar') . ' png',
 			array($this, 'file_format_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -71,7 +71,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_unknown_image',
-			'Unknown image name<br/>Default: mystery',
+			__('Unknown image name', 'buddypress-first-letter-avatar') . '<br/>' . __('Default:', 'buddypress-first-letter-avatar') . ' mystery',
 			array($this, 'unknown_image_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -79,7 +79,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_avatar_set',
-			'Avatar set<br/>Default: default',
+			__('Avatar set', 'buddypress-first-letter-avatar') . '<br/>' . __('Default:', 'buddypress-first-letter-avatar') . ' default',
 			array($this, 'avatar_set_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -87,7 +87,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_use_profile_avatar',
-			'Use users\' and groups\' avatars<br/>Default: check',
+			__("Use users' and groups' avatars", 'buddypress-first-letter-avatar') . '<br/>' . __('Default:', 'buddypress-first-letter-avatar') . ' ' .  __('check', 'buddypress-first-letter-avatar'),
 			array($this, 'use_profile_avatar_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -95,7 +95,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_use_gravatar',
-			'Use Gravatars<br/>Default: check',
+			__('Use Gravatar', 'buddypress-first-letter-avatar') . '<br/>' . __('Default:', 'buddypress-first-letter-avatar') . ' ' .  __('check', 'buddypress-first-letter-avatar'),
 			array($this, 'use_gravatar_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -103,7 +103,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_round_avatars',
-			'Round avatars<br/>Default: uncheck',
+			__('Round avatars', 'buddypress-first-letter-avatar') . '<br/>' . __('Default:', 'buddypress-first-letter-avatar') . ' ' .  __('uncheck', 'buddypress-first-letter-avatar'),
 			array($this, 'round_avatars_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -111,7 +111,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 		add_settings_field(
 			'bpfla_filter_priority',
-			'Plugin filter priority<br/>Default: 10',
+			__('Plugin filter priority', 'buddypress-first-letter-avatar') . '<br/>' . __('Default:', 'buddypress-first-letter-avatar') . ' 10',
 			array($this, 'filter_priority_render'),
 			'bpfla_pluginPage',
 			'bpfla_pluginPage_section'
@@ -214,43 +214,52 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 			<h3>Fields description:</h3>
 			<p>
-				<strong>Letter index</strong><br />
-				<span style="text-decoration: underline">0</span>: use first letter for the avatar; <span style="text-decoration: underline">1</span>: use second letter; <span style="text-decoration: underline">-1</span>: use last letter, etc.
+				<strong><?php _e('Letter index', 'buddypress-first-letter-avatar'); ?></strong><br />
+				<?php echo sprintf(__('%s use first letter for the avatar; %s use second letter; %s use last letter, etc.', 'buddypress-first-letter-avatar'),
+				'<span style="text-decoration: underline">0</span>:', '<span style="text-decoration: underline">1</span>:', '<span style="text-decoration: underline">-1</span>:'); ?>
 			</p>
 			<p>
-				<strong>File format</strong><br />
-				File format of your avatars, for example <span style="text-decoration: underline">png</span> or <span style="text-decoration: underline">jpg</span>.
+				<strong><?php _e('File format', 'buddypress-first-letter-avatar'); ?></strong><br />
+				<?php echo sprintf(__('File format of your avatars, for example %s or %s.', 'buddypress-first-letter-avatar'),
+				'<span style="text-decoration: underline">png</span>', '<span style="text-decoration: underline">jpg</span>'); ?>
 			</p>
 			<p>
-				<strong>Unknown image name</strong><br />
-				Name of the file used for unknown usernames (without extension).
+				<strong><?php _e('Unknown image name', 'buddypress-first-letter-avatar'); ?></strong><br />
+				<?php _e('Name of the file used for unknown usernames (without extension).', 'buddypress-first-letter-avatar'); ?>		
 			</p>
 			<p>
-				<strong>Avatar set</strong><br />
-				Directory where your avatars are stored.
+				<strong><?php _e('Avatar set', 'buddypress-first-letter-avatar'); ?></strong><br />
+				<?php _e('Directory where your avatars are stored.', 'buddypress-first-letter-avatar'); ?>	
 			</p>
 			<p>
-				<strong>Use users' and groups' avatars</strong><br />
-				<span style="text-decoration: underline">Check</span>: use user's and group's avatar when available; <span style="text-decoration: underline">Uncheck</span>: use Gravatar or custom avatars.
+				<strong><?php _e("Use users' and groups' avatars", 'buddypress-first-letter-avatar'); ?></strong><br />
+				<?php echo sprintf(__("%sCheck%s: use users' and groups' avatars when available; %sUncheck%s: use Gravatar or custom avatars.", 'buddypress-first-letter-avatar'),
+				'<span style="text-decoration: underline">', '</span>', '<span style="text-decoration: underline">', '</span>'); ?>
 			</p>
 			<p>
-				<strong>Use Gravatar</strong><br />
-				<span style="text-decoration: underline">Check</span>: use Gravatar when available; <span style="text-decoration: underline">Uncheck</span>: use users' profile avatars or custom avatars.
+				<strong><?php _e('Use Gravatar', 'buddypress-first-letter-avatar'); ?></strong><br />
+				<?php echo sprintf(__("%sCheck%s: use Gravatar when available; %sUncheck%s: use users' profile avatars or custom avatars.", 'buddypress-first-letter-avatar'),
+				'<span style="text-decoration: underline">', '</span>', '<span style="text-decoration: underline">', '</span>'); ?>
 			</p>
 			<p>
-				<strong>Round avatars</strong><br />
-				<span style="text-decoration: underline">Check</span>: use rounded avatars; <span style="text-decoration: underline">Uncheck</span>: use standard avatars. This may not always work - your theme may override this setting.
+				<strong><?php _e('Round avatars', 'buddypress-first-letter-avatar'); ?></strong><br />
+				<?php echo sprintf(__('%sCheck%s: use rounded avatars; %sUncheck%s: use standard avatars. This may not always work - your theme may override this setting.', 'buddypress-first-letter-avatar'),
+				'<span style="text-decoration: underline">', '</span>', '<span style="text-decoration: underline">', '</span>'); ?>
 			</p>
 			<p>
-				<strong>Filter priority</strong><br />
-				If you are using multiple avatar plugins, you can increase or decrease execution priority of this plugin. If BuddyPress First Letter Avatar is overriding your other plugins, try changing this to a lower value (for example 9).
+				<strong><?php _e('Filter priority', 'buddypress-first-letter-avatar'); ?></strong><br />
+				<?php _e('If you are using multiple avatar plugins, you can increase or decrease execution priority of this plugin. If BuddyPress First Letter Avatar is overriding your other plugins, try changing this to a lower value (for example 9).', 'buddypress-first-letter-avatar'); ?>
 			</p>
-			<p>In case of any problems, use default values.</p>
+			<p><?php _e('In case of any problems, please use default values.', 'buddypress-first-letter-avatar'); ?></p>
 
 			<hr />
 
-			<p style="text-align: right; margin-right:30px">If you like the plugin, please <a href="https://wordpress.org/support/view/plugin-reviews/buddypress-first-letter-avatar#postform">leave a review in WordPress Plugin Directory</a>!<br />
-				BuddyPress First Letter Avatar was created by <a href="http://dev49.net/">Daniel Wroblewski</a></p>
+			<p style="text-align: right; margin-right:30px"><?php 
+			$ending_text = sprintf(__('If you like the plugin, please <a href="%s">leave a rating in WordPress Plugin Directory</a>!', 'buddypress-first-letter-avatar'), 'https://wordpress.org/support/view/plugin-reviews/buddypress-first-letter-avatar#postform');
+			$ending_text .= '<br />';
+			$ending_text .= __('BuddyPress First Letter Avatar was created by', 'buddypress-first-letter-avatar') . ' <a href="http://dev49.net/">Daniel Wroblewski</a>';
+			echo $ending_text;
+			?></p>
 
 		</form>
 	<?php

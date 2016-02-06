@@ -149,7 +149,9 @@ class BuddyPress_First_Letter_Avatar {
 		if (!empty($flag)){
 			$version = 'PHP' == $flag ? $php : $wp;
 			deactivate_plugins(plugin_basename(__FILE__));
-			wp_die('<p><strong>' . self::PLUGIN_NAME . '</strong> plugin requires ' . $flag . ' version ' . $version . ' or greater.</p>', 'Plugin Activation Error',  array('response' => 200, 'back_link' => true));
+			$wrong_version_text = sprintf(__('<p>This plugin requires %s version %s or greater.</p>', 'buddypress-first-letter-avatar'), $flag, $version);
+			$wrong_version_message_title = __('Plugin Activation Error', 'buddypress-first-letter-avatar');
+			wp_die($wrong_version_text, $wrong_version_message_title, array('response' => 200, 'back_link' => true));
 		}
 
 	}
@@ -162,7 +164,7 @@ class BuddyPress_First_Letter_Avatar {
 	public function add_settings_link($links){
 
 		// add localised Settings link do plugin settings on plugins page:
-		$settings_link = '<a href="options-general.php?page=buddypress_first_letter_avatar">'.__('Settings', 'default').'</a>';
+		$settings_link = '<a href="options-general.php?page=buddypress_first_letter_avatar">'.__('Settings', 'buddypress-first-letter-avatar').'</a>';
 		array_unshift($links, $settings_link);
 
 		return $links;
@@ -445,7 +447,7 @@ class BuddyPress_First_Letter_Avatar {
 
 
 	/*
-	 * This method generates full URL for letter avatar (for example http://yourblog.com/wp-content/plugins/wp-first-letter-avatar/images/default/96/k.png),
+	 * This method generates full URL for letter avatar (for example http://yourblog.com/wp-content/plugins/buddypress-first-letter-avatar/images/default/96/k.png),
 	 * according to the $name and $size provided
 	 */
 	private function generate_first_letter_uri($name, $size){
