@@ -2,16 +2,16 @@
 # This file is distributed under the same license as the BuddyPress First Letter Avatar package.
 msgid ""
 msgstr ""
-"Project-Id-Version: BuddyPress First Letter Avatar 2.2.4\n"
+"Project-Id-Version: BuddyPress First Letter Avatar 2.2.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/buddypress-first-letter-avatar\n"
-"POT-Creation-Date: 2016-02-16 16:13:37+00:00\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-02-16 18:15+0100\n"
+"POT-Creation-Date: 2016-02-16 21:30:14+00:00\n"
+"PO-Revision-Date: 2016-02-16 22:34+0100\n"
 "Last-Translator: Daniel Wroblewski <info@dev49.net>\n"
 "Language-Team: \n"
 "Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.7.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -65,6 +65,10 @@ msgstr "niezaznaczone"
 #: buddypress-first-letter-avatar-config.php:114
 msgid "Plugin filter priority"
 msgstr "Priorytet filtrów wtyczki"
+
+#: buddypress-first-letter-avatar-config.php:215
+msgid "Fields description:"
+msgstr "Opis opcji:"
 
 #: buddypress-first-letter-avatar-config.php:218
 msgid "%s use first letter for the avatar; %s use second letter; %s use last letter, etc."
@@ -134,26 +138,27 @@ msgstr ""
 "Jeżeli podoba Ci się moja wtyczka, pozostaw <a href=\"%s\">ocenę w katalogu wtyczek</a>!"
 
 #: buddypress-first-letter-avatar-config.php:260
-msgid "BuddyPress First Letter Avatar was created by"
-msgstr "Autorem BuddyPress First Letter Avatar jest"
+msgid "BuddyPress First Letter Avatar was created by <a href=\"%s\">Daniel Wroblewski</a>"
+msgstr ""
+"Autorem wtyczki BuddyPress First Letter Avatar jest <a href=\"%s\">Daniel Wróblewski</a>"
 
-#: buddypress-first-letter-avatar.php:153
+#: buddypress-first-letter-avatar.php:168
 msgid "<p>This plugin requires %s version %s or greater.</p>"
 msgstr "<p>Ta wtyczka wymaga %s w wersji %s lub wyższej.</p>"
 
-#: buddypress-first-letter-avatar.php:154
+#: buddypress-first-letter-avatar.php:169
 msgid "Plugin Activation Error"
 msgstr "Błąd aktywacji wtyczki"
 
-#: buddypress-first-letter-avatar.php:168
+#: buddypress-first-letter-avatar.php:183
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: buddypress-first-letter-avatar.php:351
+#: buddypress-first-letter-avatar.php:369
 msgid "Profile Photo"
 msgstr ""
 
-#: buddypress-first-letter-avatar.php:399
+#: buddypress-first-letter-avatar.php:417
 msgid "Group logo of %s"
 msgstr ""
 
@@ -184,3 +189,6 @@ msgid ""
 "wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar, "
 "initial avatar"
 msgstr ""
+
+#~ msgid "BuddyPress First Letter Avatar was created by"
+#~ msgstr "Autorem BuddyPress First Letter Avatar jest"
