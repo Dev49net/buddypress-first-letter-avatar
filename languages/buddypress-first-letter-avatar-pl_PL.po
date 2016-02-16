@@ -8,11 +8,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-02-16 17:41+0100\n"
+"PO-Revision-Date: 2016-02-16 18:15+0100\n"
 "Last-Translator: Daniel Wroblewski <info@dev49.net>\n"
 "Language-Team: \n"
 "Language: pl_PL\n"
 "X-Generator: Poedit 1.7.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: buddypress-first-letter-avatar-config.php:51
 msgid "Plugin configuration"
@@ -134,7 +135,7 @@ msgstr ""
 
 #: buddypress-first-letter-avatar-config.php:260
 msgid "BuddyPress First Letter Avatar was created by"
-msgstr ""
+msgstr "Autorem BuddyPress First Letter Avatar jest"
 
 #: buddypress-first-letter-avatar.php:153
 msgid "<p>This plugin requires %s version %s or greater.</p>"
@@ -175,7 +176,7 @@ msgstr ""
 
 #. Author of the plugin/theme
 msgid "Dev49.net"
-msgstr ""
+msgstr "Dev49.net"
 
 #. Tags of the plugin/theme
 msgid ""
