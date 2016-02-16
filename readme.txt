@@ -84,6 +84,10 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 
 == Changelog ==
 
+= 2.2.5 =
+* Added Polish translation
+* Fixed problem with bbPress avatars
+
 = 2.2.4 =
 * Added fallback for Polish letters (thanks Micha³!)
 * Plugin prepared for translations (contributors are welcome!)
@@ -155,6 +159,9 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 * First BuddyPress First Letter Avatar release
 
 == Upgrade Notice ==
+
+= 2.2.5 =
+Fixed problem with bbPress and possibly other plugins - update recommended.
 
 = 2.2.4 =
 Added fallback for Polish letters - update not necessary.
