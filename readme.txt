@@ -1,7 +1,5 @@
 === BuddyPress First Letter Avatar ===
 Plugin Name: BuddyPress First Letter Avatar
-Text Domain: buddypress-first-letter-avatar
-Domain Path: /languages/
 Version: 2.2.5
 Plugin URI: http://dev49.net
 Contributors: Dev49.net, DanielAGW
