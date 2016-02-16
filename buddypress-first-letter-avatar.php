@@ -197,6 +197,7 @@ class BuddyPress_First_Letter_Avatar {
 		// create two main variables:
 		$name = '';
 		$email = '';
+		$user = null; // we will try to assign User object to this
 
 		if (is_object($id_or_email)){ // id_or_email can actually be also a comment object, so let's check it first
 			if (!empty($id_or_email->comment_ID)){
@@ -224,7 +225,7 @@ class BuddyPress_First_Letter_Avatar {
 				$name = $user->data->display_name; // ... this method is only called when unregistered user writes comments, but it's still worth checking)
 				$email = $user->data->user_email;
 			} else if (is_string($id_or_email)){ // if string was supplied
-				if (!filter_var($email, FILTER_VALIDATE_EMAIL)){ // if it is NOT email, it must be a username
+				if (!filter_var($id_or_email, FILTER_VALIDATE_EMAIL)){ // if it is NOT email, it must be a username
 					$name = $id_or_email;
 				} else { // it must be email
 					$email = $id_or_email;
@@ -266,10 +267,12 @@ class BuddyPress_First_Letter_Avatar {
 
 		}
 
-		if (empty($name)){ // if, for some reason, there is no name, use email instead
-			$name = $email;
-		} else if (empty($email)){ // and if no email, use user/guest name
-			$email = $name;
+		if (empty($name) && !empty($user) && is_object($user)){ // if we do not have the name, but we have user object
+			$name = $user->display_name;
+		}
+
+		if (empty($email) && !empty($user) && is_object($user)){ // if we do not have the email, but we have user object
+			$email = $user->user_email;
 		}
 
 		// check whether Gravatar should be used at all:
