@@ -3,7 +3,7 @@
 /**
  * Plugin Name: BuddyPress First Letter Avatar
  * Text Domain: buddypress-first-letter-avatar
- * Domain Path: /languages
+ * Domain Path: /languages/
  * Plugin URI: http://dev49.net
  * Contributors: Dev49.net, DanielAGW
  * Description: Set custom avatars for BuddyPress users. The avatar will be the first (or any other) letter of the user's name on a colorful background.
