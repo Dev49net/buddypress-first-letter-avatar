@@ -212,7 +212,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 
 			<hr />
 
-			<h3>Fields description:</h3>
+			<h3><?php _e('Fields description:', 'buddypress-first-letter-avatar'); ?></h3>
 			<p>
 				<strong><?php _e('Letter index', 'buddypress-first-letter-avatar'); ?></strong><br />
 				<?php echo sprintf(__('%s use first letter for the avatar; %s use second letter; %s use last letter, etc.', 'buddypress-first-letter-avatar'),
