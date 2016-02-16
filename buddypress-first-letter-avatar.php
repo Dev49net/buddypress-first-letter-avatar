@@ -92,6 +92,9 @@ class BuddyPress_First_Letter_Avatar {
 
 		/* --------------- WP HOOKS --------------- */
 
+		// add plugins_loaded action to load textdomain:
+		add_action('plugins_loaded', array($this, 'plugins_loaded'));
+
 		// add Settings link to plugins page:
 		add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_settings_link'));
 
@@ -117,6 +120,17 @@ class BuddyPress_First_Letter_Avatar {
 				remove_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority);
 			}
 		}
+
+	}
+
+
+
+	/*
+	 * Plugins loaded - load text domain
+	 */
+	public function plugins_loaded(){
+
+		load_plugin_textdomain('buddypress-first-letter-avatar', FALSE, basename(dirname(__FILE__)) . '/languages/');
 
 	}
 
