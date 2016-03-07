@@ -17,7 +17,7 @@ All images were compressed using the fantastic [TinyPNG](https://tinypng.com/), 
 
 ## Installation
 
-You can download a [zip from GitHub](https://github.com/Dev49net/buddypress-first-letter-avatar/archive/master.zip) and upload it using the WordPress plugin uploader or manually unzip it and place in ```wp-content/plugins/```. You can also download it from [WordPress.org Plugin Directory](https://wordpress.org/plugins/buddypress-first-letter-avatar/).
+You can download a [zip from GitHub](https://github.com/Dev49net/buddypress-first-letter-avatar/archive/master.zip), unzip it and place in ```wp-content/plugins/```. You can also download it from [WordPress.org Plugin Directory](https://wordpress.org/plugins/buddypress-first-letter-avatar/).
 
 ## WP First Letter Avatar or BuddyPress First Letter Avatar?
 
@@ -28,38 +28,6 @@ BuddyPress First Letter Avatar works on every avatar on BuddyPress site, whereas
 ## Requirements
 
 BuddyPress First Letter Avatar requires at least PHP 5.4. It **does not work properly** on PHP 5.3.x and earlier.
-
-## Configuration
-
-Configuration is very simple. Here are configuration options available in options:
-
-**Letter index:**
-
-0: use first letter for the avatar; 1: use second letter; -1: use last letter, etc.
-
-**File format:**
-
-File format of your avatars, for example png or jpg.
-
-**Unknown image name:**
-
-Name of the file used for unknown usernames.
-
-**Avatar set:**
-
-Directory where avatars are stored.
-
-**Use users' profile avatars:**
-
-Check: use users' profile avatars when available; Uncheck: use custom avatars or Gravatars.
-
-**Use Gravatar:**
-
-Check: use Gravatar when available; Uncheck: use custom avatars or users' profile avatars.
-
-**Round avatars:**
-
-Check: use rounded avatars; Uncheck: use standard avatars.
 
 ## Issues
 If you notice any errors or have an idea for improving the plugin, please write on [WordPress plugin support forum](https://wordpress.org/support/plugin/buddypress-first-letter-avatar).
