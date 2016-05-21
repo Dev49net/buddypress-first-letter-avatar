@@ -110,6 +110,9 @@ class BuddyPress_First_Letter_Avatar {
 		// add filter to bp_core_fetch_avatar:
 		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), $this->filter_priority, 2); // this is used for every avatar call except the anonymous comment posters
 
+		// filter logged in user avatar:
+		add_filter('bp_get_loggedin_user_avatar', array($this, 'set_logged_in_user_avatar'), $this->filter_priority, 3);
+
         // add filter for wpDiscuz:
 		add_filter('wpdiscuz_author_avatar_field', array($this, 'set_wpdiscuz_avatar'), $this->filter_priority, 4);
 
@@ -304,6 +307,70 @@ class BuddyPress_First_Letter_Avatar {
 		$avatar_img_output = $this->generate_avatar_img_tag($avatar_uri, $size, $alt); // get final <img /> tag for the avatar/gravatar
 
 		return $avatar_img_output;
+
+	}
+
+
+
+	/*
+	 * This method is used to filter currently logged in user avatar.
+	 * $image can be either HTML or URL to avatar, depending on the $args['html'] value.
+	 * $passed_args is basically not needed, because it lists arguments passed to the function,
+	 * whereas $args lists all these arguments, along with default values for the ones that
+	 * were not supplied.
+	 */
+	public function set_logged_in_user_avatar($image, $args, $passed_args) {
+
+		// we're going to filter the URL only if the arguments meet these conditions:
+		if ($args['html'] === false && is_numeric($args['item_id'])){
+
+			$user_id = $args['item_id'];
+			$size = $args['width'];
+			$alt = $args['alt'];
+
+			// if there is no gravatar URL, it means that user has set his own profile avatar,
+			// so we're gonna see if we should be using it (user avatar);
+			// if we should, just return the input data and leave the avatar as it was:
+			if ($this->use_profile_avatar == true){
+				if (stripos($image, 'gravatar.com/avatar') === false){ // we need to specifically check for false (hence '===')
+					return $image;
+				}
+			}
+
+			$user = get_user_by('id', $user_id);
+
+			if (empty($size)){ // if for some reason size was not specified...
+				$size = 48; // just set it to 48
+			}
+
+			if (empty($alt)){
+				$alt = __('Profile Photo', 'buddypress');
+			}
+
+			$name = $user->data->display_name;
+			$email = $user->data->user_email; // get it by user id
+
+			if (empty($name)){
+				$name = bp_core_get_username($user_id); // BuddyPress fallback
+			}
+
+			if (empty($name)){
+				$name = $user->data->user_nicename; // another fallback (to WP nicename)
+			}
+
+			$first_letter_uri = $this->generate_first_letter_uri($name, $size); // get letter URL
+
+			// check whether Gravatar should be used at all:
+			if ($this->use_gravatar == true && !empty($email)){ // if we should use gravatar and we have email
+				$gravatar_uri = $this->generate_gravatar_uri($email, $size);
+				$image = $gravatar_uri . '&default=' . urlencode($first_letter_uri);
+			} else { // gravatar not used or we do not have email
+				$image = $first_letter_uri;
+			}
+
+		}
+
+		return $image;
 
 	}
 
