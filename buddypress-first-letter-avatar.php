@@ -320,7 +320,6 @@ class BuddyPress_First_Letter_Avatar {
 
 		$user_id = $params['item_id'];
 		$size = $params['width'];
-		$alt = $params['alt'];
 		$email = $params['email'];
 
 		if (!is_numeric($user_id)){ // user_id was not passed, so we cannot do anything about this avatar
@@ -340,10 +339,6 @@ class BuddyPress_First_Letter_Avatar {
 
 		if (empty($size)){ // if for some reason size was not specified...
 			$size = 48; // just set it to 48
-		}
-
-		if (empty($alt)){
-			$alt = __('Profile Photo', 'buddypress');
 		}
 
 		$name = $user->data->display_name;
