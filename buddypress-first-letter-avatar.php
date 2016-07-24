@@ -389,7 +389,9 @@ class BuddyPress_First_Letter_Avatar {
 			return $html_data;
 		}
 
+		$original_image_url = ''; // define variable before loop
 		foreach ($image as $image_data){ // we are using foreach, but in fact there should be only one image
+			/* @var $image_data DOMNodeList */
 			$original_image_url = $image_data->getAttribute('src'); // url of the original image
 			break; // this foreach loop should be exectued only once no matter what, since there is only one img tag, but just to be safe we are going to use break here
 		}
@@ -405,9 +407,11 @@ class BuddyPress_First_Letter_Avatar {
 
 			// if there is no gravatar URL, it means that user has set his own profile avatar,
 			// so we're gonna see if we should be using it (user avatar);
-			// if we should, just return the input data and leave the avatar as it was:
+			// if we should, just return the input data and leave the avatar as it was
+			// (2nd condition explanation -> check 'group' case)
 			if ($this->use_profile_avatar == true){
-				if (stripos($original_image_url, 'gravatar.com/avatar') === false){ // we need to specifically check for false (hence '===')
+				if ((stripos($original_image_url, 'gravatar.com/avatar') === false) && // we need to specifically check for false (hence '===')
+					(stripos($original_image_url, 'bp-core/images/mystery-man') === false)){ // no extension specified just in case
 					return $html_data;
 				}
 			}
@@ -458,9 +462,12 @@ class BuddyPress_First_Letter_Avatar {
 			// we are using the same way to determine whether group has avatar set as we did with user avatars
 			// if there is no gravatar URL, it means that group has their own avatar,
 			// so we're gonna see if we should be using it (user/group avatar);
-			// if we should, just return the input data and leave the avatar as it was:
+			// if we should, just return the input data and leave the avatar as it was.
+			// it is also possible that group's mystery avatar is stored locally, so
+			// we need to check that as well
 			if ($this->use_profile_avatar == true){
-				if (stripos($original_image_url, 'gravatar.com/avatar') === false){ // we need to specifically check for false (hence '===')
+				if ((stripos($original_image_url, 'gravatar.com/avatar') === false) && // we need to specifically check for false (hence '===')
+					(stripos($original_image_url, 'bp-core/images/mystery-group') === false)){ // no extension specified just in case
 					return $html_data;
 				}
 			}
