@@ -4,8 +4,8 @@ Version: 2.2.6.1
 Plugin URI: http://dev49.net
 Contributors: Dev49.net, DanielAGW
 Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar, initial avatar
-Requires at least: 4.4
-Tested up to: 4.5.2
+Requires at least: 4.5
+Tested up to: 4.5.3
 Stable tag: trunk
 Author: Dev49.net
 Author URI: http://dev49.net
@@ -94,7 +94,7 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 * Fixed problem with bbPress avatars
 
 = 2.2.4 =
-* Added fallback for Polish letters (thanks Micha³!)
+* Added fallback for Polish letters (thanks Michaï¿½!)
 * Plugin prepared for translations (contributors are welcome!)
 
 = 2.2.3 =
