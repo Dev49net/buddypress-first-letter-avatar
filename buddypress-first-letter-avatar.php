@@ -31,7 +31,7 @@ class BuddyPress_First_Letter_Avatar {
 
 	// Setup:
 	const MINIMUM_PHP = '5.4';
-	const MINIMUM_WP = '4.0';
+	const MINIMUM_WP = '4.6';
 	const IMAGES_PATH = 'images'; // avatars root directory
 	const GRAVATAR_URL = 'https://secure.gravatar.com/avatar/'; // default url for gravatar
 	const PLUGIN_NAME = 'BuddyPress First Letter Avatar';
@@ -105,7 +105,7 @@ class BuddyPress_First_Letter_Avatar {
 		add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
 
 		// add filter to get_avatar:
-		add_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority, 5); // this will only be used for anonymous WordPress comments (from non-users)
+		add_filter('get_avatar', array($this, 'set_comment_avatar'), $this->filter_priority, 6); // this will only be used for anonymous WordPress comments (from non-users)
 
 		// add filter to bp_core_fetch_avatar:
 		add_filter('bp_core_fetch_avatar', array($this, 'set_buddypress_avatar'), $this->filter_priority, 2); // this is used for every avatar call except the anonymous comment posters
@@ -210,7 +210,7 @@ class BuddyPress_First_Letter_Avatar {
      * This method is used only for guest comments (BP filters do not filter guest avatars)
 	 * It returns a full HTML <img /> tag with avatar (first letter or Gravatar)
 	 */
-	public function set_comment_avatar($avatar, $id_or_email, $size = '96', $default = '', $alt = ''){
+	public function set_comment_avatar($avatar, $id_or_email, $size = '96', $default = '', $alt = '', $args = array()){
 
 		// create two main variables:
 		$name = '';
@@ -267,7 +267,7 @@ class BuddyPress_First_Letter_Avatar {
 				}
 			}
 
-		} else { // if it's a standard comment, use basic comment functions to retrive info
+		} else { // if it's a standard comment, use basic comment functions to retrieve info
 
 			$comment = $id_or_email;
 
@@ -304,7 +304,7 @@ class BuddyPress_First_Letter_Avatar {
 			$avatar_uri = $first_letter_uri;
 		}
 
-		$avatar_img_output = $this->generate_avatar_img_tag($avatar_uri, $size, $alt); // get final <img /> tag for the avatar/gravatar
+		$avatar_img_output = $this->generate_avatar_img_tag($avatar_uri, $size, $alt, $args); // get final <img /> tag for the avatar/gravatar
 
 		return $avatar_img_output;
 
@@ -517,15 +517,29 @@ class BuddyPress_First_Letter_Avatar {
 	/*
 	 * Generate full HTML <img /> tag with avatar URL, size, CSS classes etc.
 	 */
-	private function generate_avatar_img_tag($avatar_uri, $size, $alt = ''){
+	private function generate_avatar_img_tag($avatar_uri, $size, $alt = '', $args = array()){
+
+		// Default classes
+		$css_classes = 'avatar avatar-' . $size . ' photo';
+
+		// Append plugin class
+		$css_classes .= ' bpfla';
 
 		// prepare extra classes for <img> tag depending on plugin settings:
-		$extra_img_class = '';
 		if ($this->round_avatars == true){
-			$extra_img_class .= 'round-avatars';
+			$css_classes .= ' round-avatars';
 		}
 
-		$output_data = "<img alt='{$alt}' src='{$avatar_uri}' class='avatar avatar-{$size} photo bpfla {$extra_img_class}' width='{$size}' height='{$size}' />";
+		// Append extra classes
+		if (array_key_exists('class', $args)) {
+			if (is_array($args['class'])) {
+				$css_classes .= ' ' . implode(' ', $args['class']);
+			} else {
+				$css_classes .= ' ' . $args['class'];
+			}
+		}
+
+		$output_data = "<img alt='{$alt}' src='{$avatar_uri}' class='{$css_classes}' width='{$size}' height='{$size}' />";
 
 		// return the complete <img> tag:
 		return $output_data;
@@ -601,7 +615,7 @@ class BuddyPress_First_Letter_Avatar {
 			} else if (in_array($file_name, $allowed_letters_arabic, true)){
 				$charset_flag = 'arabic';
 			} else { // for some reason none of the charsets is appropriate
-				$file_name = $this->image_unknown; // set it to uknknown
+				$file_name = $this->image_unknown; // set it to unknown
 			}
 
 			if (!empty($charset_flag)){ // if charset_flag is not empty, i.e. flag has been set to latin, number or cyrillic...
