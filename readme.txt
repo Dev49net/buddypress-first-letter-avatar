@@ -1,11 +1,11 @@
 === BuddyPress First Letter Avatar ===
 Plugin Name: BuddyPress First Letter Avatar
-Version: 2.2.6.2
+Version: 2.2.7
 Plugin URI: http://dev49.net
 Contributors: Dev49.net, DanielAGW
 Tags: avatars, comments, buddypress, custom avatar, discussion, change avatar, avatar, custom wordpress avatar, first letter avatar, comment change avatar, wordpress new avatar, avatar, initial avatar
-Requires at least: 4.5
-Tested up to: 4.5.3
+Requires at least: 4.6
+Tested up to: 4.6.1
 Stable tag: trunk
 Author: Dev49.net
 Author URI: http://dev49.net
@@ -82,6 +82,9 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 
 == Changelog ==
 
+= 2.2.7 =
+* Added option to pass additional arguments to get_avatar() - thanks dpsjorge! (for developers only)
+
 = 2.2.6.2 =
 * Fixed group avatars issue
 
@@ -97,7 +100,7 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 * Fixed problem with bbPress avatars
 
 = 2.2.4 =
-* Added fallback for Polish letters (thanks Micha�!)
+* Added fallback for Polish letters (thanks Michal!)
 * Plugin prepared for translations (contributors are welcome!)
 
 = 2.2.3 =
@@ -167,6 +170,9 @@ Absolutely. The default priority is: first look for user's profile avatar, then 
 * First BuddyPress First Letter Avatar release
 
 == Upgrade Notice ==
+
+= 2.2.7 =
+Added new feature for developers, update not necessary.
 
 = 2.2.6.2 =
 Fixed group avatars issue, update recommended.
