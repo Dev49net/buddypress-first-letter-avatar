@@ -18,17 +18,16 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-
-
 // Exit if accessed directly:
 if (!defined('ABSPATH')){
     exit;
 }
 
-
-
-class BuddyPress_First_Letter_Avatar {
-
+/**
+ * Class BuddyPress_First_Letter_Avatar
+ */
+class BuddyPress_First_Letter_Avatar
+{
 	// Setup:
 	const MINIMUM_PHP = '5.4';
 	const MINIMUM_WP = '4.6';
@@ -47,17 +46,49 @@ class BuddyPress_First_Letter_Avatar {
 	const FILTER_PRIORITY = 10;  // plugin filter priority
 
 	// properties duplicating const values (will be changed in constructor after reading config from DB):
+    /**
+     * @var bool
+     */
 	private $use_profile_avatar = self::USE_PROFILE_AVATAR;
+
+    /**
+     * @var bool
+     */
 	private $use_gravatar = self::USE_GRAVATAR;
+
+    /**
+     * @var string
+     */
 	private $avatar_set = self::AVATAR_SET;
+
+    /**
+     * @var int
+     */
 	private $letter_index = self::LETTER_INDEX;
+
+    /**
+     * @var string
+     */
 	private $images_format = self::IMAGES_FORMAT;
+
+    /**
+     * @var bool
+     */
 	private $round_avatars = self::ROUND_AVATARS;
+
+    /**
+     * @var string
+     */
 	private $image_unknown = self::IMAGE_UNKNOWN;
+
+    /**
+     * @var int
+     */
 	private $filter_priority = self::FILTER_PRIORITY;
 
-
-
+    /**
+     * BuddyPress_First_Letter_Avatar constructor.
+     */
 	public function __construct(){
 
 		/* --------------- CONFIGURATION --------------- */
@@ -126,9 +157,7 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
 	 * Plugins loaded - load text domain
 	 */
 	public function plugins_loaded(){
@@ -137,9 +166,7 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
 	 * Add scripts and stylesheets
 	 */
 	public function enqueue_scripts(){
@@ -148,9 +175,7 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
 	 * On plugin activation check WP and PHP version and if requirements are not met, disable the plugin and display error
 	 */
 	public function plugin_activate(){ // plugin activation event
@@ -175,11 +200,13 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
-	 * Add Settings link to Plugins section
-	 */
+    /**
+     * Add Settings link to Plugins section
+     *
+     * @param array $links
+     *
+     * @return array
+     */
 	public function add_settings_link($links){
 
 		// add localised Settings link do plugin settings on plugins page:
@@ -190,11 +217,16 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+    /**
      * This is method is used to filter wpDiscuz parameter - it feeds $comment object to get_avatar() function
      * (more on line 102 in wpdiscuz/templates/comment/class.WpdiscuzWalker.php)
+     *
+     * @param $author_avatar_field
+     * @param $comment
+     * @param $user
+     * @param $profile_url
+     *
+     * @return WP_Comment
      */
 	public function set_wpdiscuz_avatar($author_avatar_field, $comment, $user, $profile_url){
 
@@ -204,11 +236,18 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
      * This method is used only for guest comments (BP filters do not filter guest avatars)
 	 * It returns a full HTML <img /> tag with avatar (first letter or Gravatar)
+     *
+     * @param string $avatar
+     * @param WP_Comment|string $id_or_email
+     * @param string $size
+     * @param string $default
+     * @param string $alt
+     * @param array $args
+     *
+     * @return string
 	 */
 	public function set_comment_avatar($avatar, $id_or_email, $size = '96', $default = '', $alt = '', $args = array()){
 
@@ -310,11 +349,14 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
 	 * This method is used to filter just the avatar URL. Basically the same as set_buddypress_avatar(),
 	 * but it does not return the full <img /> tag, it just returns the image URL
+     *
+     * @param string $image_url
+     * @param array $params
+     *
+     * @return string
 	 */
 	public function set_buddypress_avatar_url($image_url = '', $params = array()) {
 
@@ -369,11 +411,14 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
 	 * This method is used to filter every avatar, except for anonymous comments.
 	 * It returns full <img /> HTML tag
+     *
+     * @param string $html_data
+     * @param array $params
+     *
+     * @return string
 	 */
 	public function set_buddypress_avatar($html_data = '', $params = array()){
 
@@ -512,10 +557,15 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
 	 * Generate full HTML <img /> tag with avatar URL, size, CSS classes etc.
+     *
+     * @param string $avatar_uri
+     * @param string $size
+     * @param string $alt
+     * @param array $args
+     *
+     * @return string
 	 */
 	private function generate_avatar_img_tag($avatar_uri, $size, $alt = '', $args = array()){
 
@@ -546,11 +596,14 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
 	 * This method generates full URL for letter avatar (for example http://yourblog.com/wp-content/plugins/buddypress-first-letter-avatar/images/default/96/k.png),
 	 * according to the $name and $size provided
+     *
+     * @param string $name
+     * @param string $size
+     *
+     * @return string
 	 */
 	private function generate_first_letter_uri($name, $size){
 
@@ -667,10 +720,13 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
 	 * This method generates full URL for Gravatar, according to the $email and $size provided
+     *
+     * @param string $email
+     * @param string $size
+     *
+     * @return string
 	 */
 	private function generate_gravatar_uri($email, $size = '96'){
 
@@ -687,9 +743,7 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 
-
-
-	/*
+	/**
 	 * This method is not used, but I'm keeping it since it may be useful.
 	 * This method generates a clean gravatar URL from any kind of gravatar URL. It's useful, because it allows to control exactly how the Gravatar URL looks like.
 	 * It basically strips any parameters and makes sure that the gravatar URL always has the same format (for example https://secure.gravatar.com/avatar/)
@@ -748,14 +802,10 @@ class BuddyPress_First_Letter_Avatar {
 
 	}
 	 */
-
-
 }
-
 
 // create BuddyPress_First_Letter_Avatar object:
 $bp_first_letter_avatar = new BuddyPress_First_Letter_Avatar();
-
 
 // require back-end of the plugin
 if (is_admin() && !defined('DOING_AJAX')){
