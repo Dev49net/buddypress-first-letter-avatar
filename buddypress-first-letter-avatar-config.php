@@ -229,7 +229,7 @@ class BuddyPress_First_Letter_Avatar_Config {
 			</p>
 			<p>
 				<strong><?php _e('Avatar set', 'buddypress-first-letter-avatar'); ?></strong><br />
-				<?php _e('Directory where your avatars are stored.', 'buddypress-first-letter-avatar'); ?>	
+				<?php _e('Directory where your avatars are stored. Supplied sets: "default", "opensans" and "roboto".', 'buddypress-first-letter-avatar'); ?>
 			</p>
 			<p>
 				<strong><?php _e("Use users' and groups' avatars", 'buddypress-first-letter-avatar'); ?></strong><br />
